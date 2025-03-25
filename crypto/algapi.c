@@ -1105,6 +1105,14 @@ static void __init crypto_start_tests(void)
 
 static int __init crypto_algapi_init(void)
 {
+#if defined(CONFIG_CRYPTO_FIPS140_EXTMOD) && !defined(FIPS_MODULE)
+	/*
+	 * The FIPS module will have done the initialization already.
+	 */
+	if (fips_enabled)
+		return 0;
+#endif
+
 	crypto_init_proc();
 	crypto_start_tests();
 	return 0;
