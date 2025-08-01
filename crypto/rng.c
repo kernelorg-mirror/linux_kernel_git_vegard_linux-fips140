@@ -24,8 +24,7 @@
 #include "internal.h"
 
 static DEFINE_MUTEX(crypto_default_rng_lock);
-struct crypto_rng *crypto_default_rng;
-EXPORT_SYMBOL_GPL(crypto_default_rng);
+static struct crypto_rng *crypto_default_rng;
 static int crypto_default_rng_refcnt;
 
 int crypto_rng_reset(struct crypto_rng *tfm, const u8 *seed, unsigned int slen)
@@ -107,7 +106,7 @@ struct crypto_rng *crypto_alloc_rng(const char *alg_name, u32 type, u32 mask)
 }
 EXPORT_SYMBOL_GPL(crypto_alloc_rng);
 
-int crypto_get_default_rng(void)
+int crypto_get_default_rng(struct crypto_rng **result)
 {
 	struct crypto_rng *rng;
 	int err;
@@ -128,6 +127,7 @@ int crypto_get_default_rng(void)
 		crypto_default_rng = rng;
 	}
 
+	*result = crypto_default_rng;
 	crypto_default_rng_refcnt++;
 	err = 0;
 
@@ -138,9 +138,10 @@ unlock:
 }
 EXPORT_SYMBOL_GPL(crypto_get_default_rng);
 
-void crypto_put_default_rng(void)
+void crypto_put_default_rng(struct crypto_rng **rng)
 {
 	mutex_lock(&crypto_default_rng_lock);
+	*rng = NULL;
 	crypto_default_rng_refcnt--;
 	mutex_unlock(&crypto_default_rng_lock);
 }
