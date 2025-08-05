@@ -139,6 +139,14 @@
 /* Set if the algorithm cannot have a fallback (e.g., phmac). */
 #define CRYPTO_ALG_NO_FALLBACK		0x00080000
 
+/*
+ * The algorithm is provided by the FIPS module.
+ *
+ * NOTE: an algorithm can be provided by the FIPS module and not be
+ * approved, depending on the exact parameters like key size, etc.
+ */
+#define CRYPTO_ALG_FIPS_PROVIDED	0x00100000
+
 /* The high bits 0xff000000 are reserved for type-specific flags. */
 
 /*
