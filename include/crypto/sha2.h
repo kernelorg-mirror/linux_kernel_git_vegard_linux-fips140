@@ -59,6 +59,20 @@
 #define SHA512_H6	0x1f83d9abfb41bd6bULL
 #define SHA512_H7	0x5be0cd19137e2179ULL
 
+#ifdef CONFIG_CRYPTO_FIPS140_EXTMOD
+#ifdef FIPS_MODULE
+#define sha224_zero_message_hash fips_sha224_zero_message_hash
+#define sha256_zero_message_hash fips_sha256_zero_message_hash
+#define sha384_zero_message_hash fips_sha384_zero_message_hash
+#define sha512_zero_message_hash fips_sha512_zero_message_hash
+#else
+#define sha224_zero_message_hash nonfips_sha224_zero_message_hash
+#define sha256_zero_message_hash nonfips_sha256_zero_message_hash
+#define sha384_zero_message_hash nonfips_sha384_zero_message_hash
+#define sha512_zero_message_hash nonfips_sha512_zero_message_hash
+#endif
+#endif
+
 extern const u8 sha224_zero_message_hash[SHA224_DIGEST_SIZE];
 
 extern const u8 sha256_zero_message_hash[SHA256_DIGEST_SIZE];
