@@ -14,6 +14,14 @@
 #include <linux/key-type.h>
 #include <linux/verification.h>
 
+#ifdef CONFIG_CRYPTO_FIPS140_EXTMOD
+#ifdef FIPS_MODULE
+#define key_type_asymmetric fips_key_type_asymmetric
+#else
+#define key_type_asymmetric nonfips_key_type_asymmetric
+#endif
+#endif
+
 extern struct key_type key_type_asymmetric;
 
 /*
