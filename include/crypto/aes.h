@@ -29,6 +29,16 @@ struct crypto_aes_ctx {
 	u32 key_length;
 };
 
+#ifdef CONFIG_CRYPTO_FIPS140_EXTMOD
+#ifdef FIPS_MODULE
+#define crypto_ft_tab fips_crypto_ft_tab
+#define crypto_it_tab fips_crypto_it_tab
+#else
+#define crypto_ft_tab nonfips_crypto_ft_tab
+#define crypto_it_tab nonfips_crypto_it_tab
+#endif
+#endif
+
 extern const u32 crypto_ft_tab[4][256] ____cacheline_aligned;
 extern const u32 crypto_it_tab[4][256] ____cacheline_aligned;
 
