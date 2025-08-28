@@ -8,6 +8,8 @@
 #ifndef _CRYPTO_DH_
 #define _CRYPTO_DH_
 
+#include <crypto/api.h>
+
 /**
  * DOC: DH Helper Functions
  *

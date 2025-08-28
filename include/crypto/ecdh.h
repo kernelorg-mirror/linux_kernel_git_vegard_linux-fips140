@@ -8,6 +8,8 @@
 #ifndef _CRYPTO_ECDH_
 #define _CRYPTO_ECDH_
 
+#include <crypto/api.h>
+
 /**
  * DOC: ECDH Helper Functions
  *
