@@ -58,6 +58,14 @@ DECLARE_CRYPTO_API(public_key_signature_free, void,
 	(struct public_key_signature *sig),
 	(sig));
 
+#ifdef CONFIG_CRYPTO_FIPS140_EXTMOD
+#ifdef FIPS_MODULE
+#define public_key_subtype fips_public_key_subtype
+#else
+#define public_key_subtype nonfips_public_key_subtype
+#endif
+#endif
+
 extern struct asymmetric_key_subtype public_key_subtype;
 
 struct key;
