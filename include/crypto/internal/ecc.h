@@ -30,6 +30,16 @@
 #include <crypto/ecc_curve.h>
 #include <linux/unaligned.h>
 
+#ifdef CONFIG_CRYPTO_FIPS140_EXTMOD
+#ifdef FIPS_MODULE
+#define ecdsa_x962_tmpl fips_ecdsa_x962_tmpl
+#define ecdsa_p1363_tmpl fips_ecdsa_p1363_tmpl
+#else
+#define ecdsa_x962_tmpl nonfips_ecdsa_x962_tmpl
+#define ecdsa_p1363_tmpl nonfips_ecdsa_p1363_tmpl
+#endif
+#endif
+
 /* One digit is u64 qword. */
 #define ECC_CURVE_NIST_P192_DIGITS  3
 #define ECC_CURVE_NIST_P256_DIGITS  4
