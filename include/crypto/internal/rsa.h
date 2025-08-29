@@ -12,6 +12,16 @@
 #include <linux/types.h>
 #include <crypto/akcipher.h>
 
+#ifdef CONFIG_CRYPTO_FIPS140_EXTMOD
+#ifdef FIPS_MODULE
+#define rsa_pkcs1pad_tmpl fips_rsa_pkcs1pad_tmpl
+#define rsassa_pkcs1_tmpl fips_rsassa_pkcs1_tmpl
+#else
+#define rsa_pkcs1pad_tmpl nonfips_rsa_pkcs1pad_tmpl
+#define rsassa_pkcs1_tmpl nonfips_rsassa_pkcs1_tmpl
+#endif
+#endif
+
 /**
  * rsa_key - RSA key structure
  * @n           : RSA modulus raw byte stream
