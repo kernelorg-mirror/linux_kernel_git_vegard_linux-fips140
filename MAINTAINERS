@@ -9467,6 +9467,16 @@ L:	linux-can@vger.kernel.org
 S:	Maintained
 F:	drivers/net/can/usb/f81604.c
 
+FIPS 140 STANDALONE MODULE SUPPORT
+M:	Vegard Nossum <vegard.nossum@oracle.com>
+L:	linux-crypto@vger.kernel.org
+S:	Maintained
+F:	crypto/fips140*
+F:	fips140/
+F:	include/crypto/api.h
+F:	scripts/extract-fips140
+F:	Documentation/crypto/fips140.rst
+
 FIREWIRE AUDIO DRIVERS and IEC 61883-1/6 PACKET STREAMING ENGINE
 M:	Clemens Ladisch <clemens@ladisch.de>
 M:	Takashi Sakamoto <o-takashi@sakamocchi.jp>
