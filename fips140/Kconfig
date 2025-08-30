@@ -1,0 +1,174 @@
+# NOTE: the structure of this file mirrors that of crypto/Kconfig
+# and crypto/asymmetric/keys/Kconfig
+
+config CRYPTO_FIPS140_EXTMOD
+	bool "FIPS 140-3 external module"
+	depends on MODULES
+	depends on CRYPTO_FIPS
+	help
+	  Support loading a prebuilt FIPS 140-3 cryptographic module.
+
+if CRYPTO_FIPS140_EXTMOD
+
+config CRYPTO_FIPS140_HMAC_KEY
+	string "FIPS 140-3 external module HMAC key"
+	default "Sphinx of black quartz, judge my vow"
+	help
+	  This is the HMAC key used to build and verify the integrity of
+	  the FIPS module.
+
+	  Must be at least 14 characters.
+
+config CRYPTO_FIPS140_PCRYPT
+	bool
+	default CRYPTO_PCRYPT
+
+menu "FIPS 140 external module algorithms"
+	depends on CRYPTO_FIPS140_EXTMOD
+
+#
+# Public-key cryptography
+#
+
+config CRYPTO_FIPS140_RSA
+	bool "RSA (Rivest-Shamir-Adleman)"
+	default CRYPTO_RSA
+
+config CRYPTO_FIPS140_DH
+	bool "DH (Diffie-Hellman)"
+	default CRYPTO_DH
+
+config CRYPTO_FIPS140_ECC
+	bool
+	default CRYPTO_ECC
+
+config CRYPTO_FIPS140_ECDH
+	bool "ECDH (Elliptic Curve Diffie-Hellman)"
+	select CRYPTO_FIPS140_ECC
+	default CRYPTO_ECDH
+
+config CRYPTO_FIPS140_ECDSA
+	bool "ECDSA (Elliptic Curve Digital Signature Algorithm)"
+	default CRYPTO_ECDSA
+
+#
+# Block ciphers
+#
+
+config CRYPTO_FIPS140_AES
+	bool "AES (Advanced Encryption Standard)"
+	default CRYPTO_AES
+
+#
+# Length-preserving ciphers and modes
+#
+
+config CRYPTO_FIPS140_CBC
+	bool "CBC (Cipher Block Chaining)"
+	default CRYPTO_CBC
+
+config CRYPTO_FIPS140_CTR
+	bool "CTR (Counter)"
+	default CRYPTO_CTR
+
+config CRYPTO_FIPS140_ECB
+	bool "ECB (Electronic Codebook)"
+	default CRYPTO_ECB
+
+config CRYPTO_FIPS140_XTS
+	bool "XTS (XOR Encrypt XOR with ciphertext stealing)"
+	default CRYPTO_XTS
+
+#
+# AEAD (authenticated encryption with associated data) ciphers
+#
+
+config CRYPTO_FIPS140_CCM
+	bool "CCM (Counter with Cipher Block Chaining-MAC)"
+	default CRYPTO_CCM
+
+config CRYPTO_FIPS140_GCM
+	bool "GCM (Galois/Counter Mode) and GMAC (GCM MAC)"
+	default CRYPTO_GCM
+
+config CRYPTO_FIPS140_GENIV
+	bool
+	default CRYPTO_GENIV
+
+config CRYPTO_FIPS140_SEQIV
+	bool "Sequence Number IV Generator"
+	select CRYPTO_FIPS140_GENIV
+	default CRYPTO_SEQIV
+
+config CRYPTO_FIPS140_ECHAINIV
+	bool "Encrypted Chain IV Generator"
+	select CRYPTO_FIPS140_GENIV
+	default CRYPTO_ECHAINIV
+
+config CRYPTO_FIPS140_ESSIV
+	bool "Encrypted Salt-Sector IV Generator"
+	default CRYPTO_ESSIV
+
+#
+# Hashes, digests, and MACs
+#
+
+config CRYPTO_FIPS140_CMAC
+	bool "CMAC (Cipher-based MAC)"
+	default CRYPTO_CMAC
+
+config CRYPTO_FIPS140_HMAC
+	bool "HMAC (Keyed-Hash MAC)"
+	default CRYPTO_HMAC
+
+config CRYPTO_FIPS140_SHA256
+	bool "SHA-244 and SHA-256"
+	default CRYPTO_SHA256
+
+config CRYPTO_FIPS140_SHA512
+	bool "SHA-384 and SHA-512"
+	default CRYPTO_SHA512
+
+config CRYPTO_FIPS140_SHA3
+	bool "SHA-3"
+	default CRYPTO_SHA3
+
+#
+# Random number generation
+#
+
+config CRYPTO_FIPS140_JITTERENTROPY
+	bool "CPU Jitter Non-Deterministic RNG (Random Number Generator)"
+	select CRYPTO_FIPS140_SHA3
+
+#
+# Asymmetric keys
+#
+
+config FIPS140_ASYMMETRIC_KEY_TYPE
+	bool "Asymmetric (public-key cryptographic) key type"
+	default ASYMMETRIC_KEY_TYPE
+
+if FIPS140_ASYMMETRIC_KEY_TYPE
+
+config FIPS140_ASYMMETRIC_PUBLIC_KEY_SUBTYPE
+	bool "Asymmetric public-key crypto algorithm subtype"
+	default ASYMMETRIC_PUBLIC_KEY_SUBTYPE
+
+config FIPS140_X509_CERTIFICATE_PARSER
+	bool "X.509 certificate parser"
+	default X509_CERTIFICATE_PARSER
+
+config FIPS140_PKCS8_PRIVATE_KEY_PARSER
+	bool "PKCS#8 private key parser"
+	default PKCS8_PRIVATE_KEY_PARSER
+
+config FIPS140_PKCS7_MESSAGE_PARSER
+	bool "PKCS#7 message parser"
+	default PKCS7_MESSAGE_PARSER
+
+endif
+
+endmenu
+
+endif # if CRYPTO_FIPS140_EXTMOD
