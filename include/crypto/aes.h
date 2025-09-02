@@ -101,6 +101,16 @@ DECLARE_CRYPTO_API(aes_decrypt, void,
 	(const struct crypto_aes_ctx *ctx, u8 *out, const u8 *in),
 	(ctx, out, in));
 
+#ifdef CONFIG_CRYPTO_FIPS140_EXTMOD
+#ifdef FIPS_MODULE
+#define crypto_aes_sbox fips_crypto_aes_sbox
+#define crypto_aes_inv_sbox fips_crypto_aes_inv_sbox
+#else
+#define crypto_aes_sbox nonfips_crypto_aes_sbox
+#define crypto_aes_inv_sbox nonfips_crypto_aes_inv_sbox
+#endif
+#endif
+
 extern const u8 crypto_aes_sbox[];
 extern const u8 crypto_aes_inv_sbox[];
 
