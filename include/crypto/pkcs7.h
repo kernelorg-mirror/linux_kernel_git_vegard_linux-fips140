@@ -8,6 +8,7 @@
 #ifndef _CRYPTO_PKCS7_H
 #define _CRYPTO_PKCS7_H
 
+#include <crypto/api.h>
 #include <linux/verification.h>
 #include <linux/hash_info.h>
 #include <crypto/public_key.h>
@@ -18,13 +19,16 @@ struct pkcs7_message;
 /*
  * pkcs7_parser.c
  */
-extern struct pkcs7_message *pkcs7_parse_message(const void *data,
-						 size_t datalen);
-extern void pkcs7_free_message(struct pkcs7_message *pkcs7);
+DECLARE_CRYPTO_API(pkcs7_parse_message, struct pkcs7_message *,
+	(const void *data, size_t datalen),
+	(data, datalen));
+DECLARE_CRYPTO_API(pkcs7_free_message, void,
+	(struct pkcs7_message *pkcs7),
+	(pkcs7));
 
-extern int pkcs7_get_content_data(const struct pkcs7_message *pkcs7,
-				  const void **_data, size_t *_datalen,
-				  size_t *_headerlen);
+DECLARE_CRYPTO_API(pkcs7_get_content_data, int,
+	(const struct pkcs7_message *pkcs7, const void **_data, size_t *_datalen, size_t *_headerlen),
+	(pkcs7, _data, _datalen, _headerlen));
 
 /*
  * pkcs7_trust.c
