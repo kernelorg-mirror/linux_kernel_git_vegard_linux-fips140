@@ -100,21 +100,21 @@ static const struct crypto_type crypto_akcipher_type = {
 	.algsize = offsetof(struct akcipher_alg, base),
 };
 
-int crypto_grab_akcipher(struct crypto_akcipher_spawn *spawn,
+int CRYPTO_API(crypto_grab_akcipher)(struct crypto_akcipher_spawn *spawn,
 			 struct crypto_instance *inst,
 			 const char *name, u32 type, u32 mask)
 {
 	spawn->base.frontend = &crypto_akcipher_type;
 	return crypto_grab_spawn(&spawn->base, inst, name, type, mask);
 }
-EXPORT_SYMBOL_GPL(crypto_grab_akcipher);
+DEFINE_CRYPTO_API(crypto_grab_akcipher);
 
-struct crypto_akcipher *crypto_alloc_akcipher(const char *alg_name, u32 type,
+struct crypto_akcipher *CRYPTO_API(crypto_alloc_akcipher)(const char *alg_name, u32 type,
 					      u32 mask)
 {
 	return crypto_alloc_tfm(alg_name, &crypto_akcipher_type, type, mask);
 }
-EXPORT_SYMBOL_GPL(crypto_alloc_akcipher);
+DEFINE_CRYPTO_API(crypto_alloc_akcipher);
 
 static void akcipher_prepare_alg(struct akcipher_alg *alg)
 {
@@ -136,7 +136,7 @@ static int akcipher_default_set_key(struct crypto_akcipher *tfm,
 	return -ENOSYS;
 }
 
-int crypto_register_akcipher(struct akcipher_alg *alg)
+int CRYPTO_API(crypto_register_akcipher)(struct akcipher_alg *alg)
 {
 	struct crypto_alg *base = &alg->base;
 
@@ -150,15 +150,15 @@ int crypto_register_akcipher(struct akcipher_alg *alg)
 	akcipher_prepare_alg(alg);
 	return crypto_register_alg(base);
 }
-EXPORT_SYMBOL_GPL(crypto_register_akcipher);
+DEFINE_CRYPTO_API(crypto_register_akcipher);
 
-void crypto_unregister_akcipher(struct akcipher_alg *alg)
+void CRYPTO_API(crypto_unregister_akcipher)(struct akcipher_alg *alg)
 {
 	crypto_unregister_alg(&alg->base);
 }
-EXPORT_SYMBOL_GPL(crypto_unregister_akcipher);
+DEFINE_CRYPTO_API(crypto_unregister_akcipher);
 
-int akcipher_register_instance(struct crypto_template *tmpl,
+int CRYPTO_API(akcipher_register_instance)(struct crypto_template *tmpl,
 			       struct akcipher_instance *inst)
 {
 	if (WARN_ON(!inst->free))
@@ -166,7 +166,7 @@ int akcipher_register_instance(struct crypto_template *tmpl,
 	akcipher_prepare_alg(&inst->alg);
 	return crypto_register_instance(tmpl, akcipher_crypto_instance(inst));
 }
-EXPORT_SYMBOL_GPL(akcipher_register_instance);
+DEFINE_CRYPTO_API(akcipher_register_instance);
 
 static int crypto_akcipher_sync_prep(struct crypto_akcipher_sync_data *data)
 {
@@ -215,7 +215,7 @@ static int crypto_akcipher_sync_post(struct crypto_akcipher_sync_data *data,
 	return err;
 }
 
-int crypto_akcipher_sync_encrypt(struct crypto_akcipher *tfm,
+int CRYPTO_API(crypto_akcipher_sync_encrypt)(struct crypto_akcipher *tfm,
 				 const void *src, unsigned int slen,
 				 void *dst, unsigned int dlen)
 {
@@ -231,9 +231,9 @@ int crypto_akcipher_sync_encrypt(struct crypto_akcipher *tfm,
 	       crypto_akcipher_sync_post(&data,
 					 crypto_akcipher_encrypt(data.req));
 }
-EXPORT_SYMBOL_GPL(crypto_akcipher_sync_encrypt);
+DEFINE_CRYPTO_API(crypto_akcipher_sync_encrypt);
 
-int crypto_akcipher_sync_decrypt(struct crypto_akcipher *tfm,
+int CRYPTO_API(crypto_akcipher_sync_decrypt)(struct crypto_akcipher *tfm,
 				 const void *src, unsigned int slen,
 				 void *dst, unsigned int dlen)
 {
@@ -250,7 +250,7 @@ int crypto_akcipher_sync_decrypt(struct crypto_akcipher *tfm,
 					 crypto_akcipher_decrypt(data.req)) ?:
 	       data.dlen;
 }
-EXPORT_SYMBOL_GPL(crypto_akcipher_sync_decrypt);
+DEFINE_CRYPTO_API(crypto_akcipher_sync_decrypt);
 
 MODULE_LICENSE("GPL");
 MODULE_DESCRIPTION("Generic public key cipher type");
