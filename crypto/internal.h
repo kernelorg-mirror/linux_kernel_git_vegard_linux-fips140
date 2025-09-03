@@ -8,6 +8,7 @@
 #ifndef _CRYPTO_INTERNAL_H
 #define _CRYPTO_INTERNAL_H
 
+#include <crypto/api.h>
 #include <crypto/algapi.h>
 #include <linux/completion.h>
 #include <linux/err.h>
@@ -114,11 +115,16 @@ struct crypto_alg *crypto_alg_mod_lookup(const char *name, u32 type, u32 mask);
 
 struct crypto_larval *crypto_larval_alloc(const char *name, u32 type, u32 mask);
 void crypto_schedule_test(struct crypto_larval *larval);
-void crypto_alg_tested(struct crypto_alg *alg, int err);
+DECLARE_CRYPTO_API(crypto_alg_tested, void,
+	(struct crypto_alg *alg, int err),
+	(alg, err));
 
-void crypto_remove_spawns(struct crypto_alg *alg, struct list_head *list,
-			  struct crypto_alg *nalg);
-void crypto_remove_final(struct list_head *list);
+DECLARE_CRYPTO_API(crypto_remove_spawns, void,
+	(struct crypto_alg *alg, struct list_head *list, struct crypto_alg *nalg),
+	(alg, list, nalg));
+DECLARE_CRYPTO_API(crypto_remove_final, void,
+	(struct list_head *list),
+	(list));
 void crypto_shoot_alg(struct crypto_alg *alg);
 struct crypto_tfm *__crypto_alloc_tfmgfp(struct crypto_alg *alg, u32 type,
 					 u32 mask, gfp_t gfp);
@@ -151,10 +157,13 @@ static inline void *crypto_alloc_tfm(const char *alg_name,
 
 int crypto_probing_notify(unsigned long val, void *v);
 
-unsigned int crypto_alg_extsize(struct crypto_alg *alg);
+DECLARE_CRYPTO_API(crypto_alg_extsize, unsigned int,
+	(struct crypto_alg *alg),
+	(alg));
 
-int crypto_type_has_alg(const char *name, const struct crypto_type *frontend,
-			u32 type, u32 mask);
+DECLARE_CRYPTO_API(crypto_type_has_alg, int,
+	(const char *name, const struct crypto_type *frontend, u32 type, u32 mask),
+	(name, frontend, type, mask));
 
 static inline struct crypto_alg *crypto_alg_get(struct crypto_alg *alg)
 {

@@ -174,7 +174,7 @@ static void crypto_remove_instance(struct crypto_instance *inst,
  * that is depended on by nalg.  This is useful when nalg itself
  * depends on alg.
  */
-void crypto_remove_spawns(struct crypto_alg *alg, struct list_head *list,
+void CRYPTO_API(crypto_remove_spawns)(struct crypto_alg *alg, struct list_head *list,
 			  struct crypto_alg *nalg)
 {
 	u32 new_type = (nalg ?: alg)->cra_flags;
@@ -252,7 +252,7 @@ void crypto_remove_spawns(struct crypto_alg *alg, struct list_head *list,
 			crypto_remove_instance(spawn->inst, list);
 	}
 }
-EXPORT_SYMBOL_GPL(crypto_remove_spawns);
+DEFINE_CRYPTO_API(crypto_remove_spawns);
 
 static void crypto_alg_finish_registration(struct crypto_alg *alg,
 					   struct list_head *algs_to_put)
@@ -366,7 +366,7 @@ err:
 	goto out;
 }
 
-void crypto_alg_tested(struct crypto_alg *alg, int err)
+void CRYPTO_API(crypto_alg_tested)(struct crypto_alg *alg, int err)
 {
 	struct crypto_larval *test;
 	struct crypto_alg *q;
@@ -412,9 +412,9 @@ complete:
 	crypto_alg_put(&test->alg);
 	crypto_remove_final(&list);
 }
-EXPORT_SYMBOL_GPL(crypto_alg_tested);
+DEFINE_CRYPTO_API(crypto_alg_tested);
 
-void crypto_remove_final(struct list_head *list)
+void CRYPTO_API(crypto_remove_final)(struct list_head *list)
 {
 	struct crypto_alg *alg;
 	struct crypto_alg *n;
@@ -424,7 +424,7 @@ void crypto_remove_final(struct list_head *list)
 		crypto_alg_put(alg);
 	}
 }
-EXPORT_SYMBOL_GPL(crypto_remove_final);
+DEFINE_CRYPTO_API(crypto_remove_final);
 
 static void crypto_free_alg(struct crypto_alg *alg)
 {
@@ -435,7 +435,7 @@ static void crypto_free_alg(struct crypto_alg *alg)
 	kfree(p);
 }
 
-int crypto_register_alg(struct crypto_alg *alg)
+int CRYPTO_API(crypto_register_alg)(struct crypto_alg *alg)
 {
 	struct crypto_larval *larval;
 	bool test_started = false;
@@ -490,7 +490,7 @@ int crypto_register_alg(struct crypto_alg *alg)
 
 	return 0;
 }
-EXPORT_SYMBOL_GPL(crypto_register_alg);
+DEFINE_CRYPTO_API(crypto_register_alg);
 
 static int crypto_remove_alg(struct crypto_alg *alg, struct list_head *list)
 {
@@ -505,7 +505,7 @@ static int crypto_remove_alg(struct crypto_alg *alg, struct list_head *list)
 	return 0;
 }
 
-void crypto_unregister_alg(struct crypto_alg *alg)
+void CRYPTO_API(crypto_unregister_alg)(struct crypto_alg *alg)
 {
 	int ret;
 	LIST_HEAD(list);
@@ -522,9 +522,9 @@ void crypto_unregister_alg(struct crypto_alg *alg)
 	list_add(&alg->cra_list, &list);
 	crypto_remove_final(&list);
 }
-EXPORT_SYMBOL_GPL(crypto_unregister_alg);
+DEFINE_CRYPTO_API(crypto_unregister_alg);
 
-int crypto_register_algs(struct crypto_alg *algs, int count)
+int CRYPTO_API(crypto_register_algs)(struct crypto_alg *algs, int count)
 {
 	int i, ret;
 
@@ -542,18 +542,18 @@ err:
 
 	return ret;
 }
-EXPORT_SYMBOL_GPL(crypto_register_algs);
+DEFINE_CRYPTO_API(crypto_register_algs);
 
-void crypto_unregister_algs(struct crypto_alg *algs, int count)
+void CRYPTO_API(crypto_unregister_algs)(struct crypto_alg *algs, int count)
 {
 	int i;
 
 	for (i = 0; i < count; i++)
 		crypto_unregister_alg(&algs[i]);
 }
-EXPORT_SYMBOL_GPL(crypto_unregister_algs);
+DEFINE_CRYPTO_API(crypto_unregister_algs);
 
-int crypto_register_template(struct crypto_template *tmpl)
+int CRYPTO_API(crypto_register_template)(struct crypto_template *tmpl)
 {
 	struct crypto_template *q;
 	int err = -EEXIST;
@@ -581,9 +581,9 @@ out:
 	up_write(&crypto_alg_sem);
 	return err;
 }
-EXPORT_SYMBOL_GPL(crypto_register_template);
+DEFINE_CRYPTO_API(crypto_register_template);
 
-int crypto_register_templates(struct crypto_template *tmpls, int count)
+int CRYPTO_API(crypto_register_templates)(struct crypto_template *tmpls, int count)
 {
 	int i, err;
 
@@ -599,9 +599,9 @@ out:
 		crypto_unregister_template(&tmpls[i]);
 	return err;
 }
-EXPORT_SYMBOL_GPL(crypto_register_templates);
+DEFINE_CRYPTO_API(crypto_register_templates);
 
-void crypto_unregister_template(struct crypto_template *tmpl)
+void CRYPTO_API(crypto_unregister_template)(struct crypto_template *tmpl)
 {
 	struct crypto_instance *inst;
 	struct hlist_node *n;
@@ -630,16 +630,16 @@ void crypto_unregister_template(struct crypto_template *tmpl)
 
 	flush_work(&tmpl->free_work);
 }
-EXPORT_SYMBOL_GPL(crypto_unregister_template);
+DEFINE_CRYPTO_API(crypto_unregister_template);
 
-void crypto_unregister_templates(struct crypto_template *tmpls, int count)
+void CRYPTO_API(crypto_unregister_templates)(struct crypto_template *tmpls, int count)
 {
 	int i;
 
 	for (i = count - 1; i >= 0; --i)
 		crypto_unregister_template(&tmpls[i]);
 }
-EXPORT_SYMBOL_GPL(crypto_unregister_templates);
+DEFINE_CRYPTO_API(crypto_unregister_templates);
 
 static struct crypto_template *__crypto_lookup_template(const char *name)
 {
@@ -660,14 +660,14 @@ static struct crypto_template *__crypto_lookup_template(const char *name)
 	return tmpl;
 }
 
-struct crypto_template *crypto_lookup_template(const char *name)
+struct crypto_template *CRYPTO_API(crypto_lookup_template)(const char *name)
 {
 	return try_then_request_module(__crypto_lookup_template(name),
 				       "crypto-%s", name);
 }
-EXPORT_SYMBOL_GPL(crypto_lookup_template);
+DEFINE_CRYPTO_API(crypto_lookup_template);
 
-int crypto_register_instance(struct crypto_template *tmpl,
+int CRYPTO_API(crypto_register_instance)(struct crypto_template *tmpl,
 			     struct crypto_instance *inst)
 {
 	struct crypto_larval *larval;
@@ -748,9 +748,9 @@ unlock:
 
 	return 0;
 }
-EXPORT_SYMBOL_GPL(crypto_register_instance);
+DEFINE_CRYPTO_API(crypto_register_instance);
 
-void crypto_unregister_instance(struct crypto_instance *inst)
+void CRYPTO_API(crypto_unregister_instance)(struct crypto_instance *inst)
 {
 	LIST_HEAD(list);
 
@@ -763,9 +763,9 @@ void crypto_unregister_instance(struct crypto_instance *inst)
 
 	crypto_remove_final(&list);
 }
-EXPORT_SYMBOL_GPL(crypto_unregister_instance);
+DEFINE_CRYPTO_API(crypto_unregister_instance);
 
-int crypto_grab_spawn(struct crypto_spawn *spawn, struct crypto_instance *inst,
+int CRYPTO_API(crypto_grab_spawn)(struct crypto_spawn *spawn, struct crypto_instance *inst,
 		      const char *name, u32 type, u32 mask)
 {
 	struct crypto_alg *alg;
@@ -799,9 +799,9 @@ int crypto_grab_spawn(struct crypto_spawn *spawn, struct crypto_instance *inst,
 		crypto_mod_put(alg);
 	return err;
 }
-EXPORT_SYMBOL_GPL(crypto_grab_spawn);
+DEFINE_CRYPTO_API(crypto_grab_spawn);
 
-void crypto_drop_spawn(struct crypto_spawn *spawn)
+void CRYPTO_API(crypto_drop_spawn)(struct crypto_spawn *spawn)
 {
 	if (!spawn->alg) /* not yet initialized? */
 		return;
@@ -814,7 +814,7 @@ void crypto_drop_spawn(struct crypto_spawn *spawn)
 	if (!spawn->registered)
 		crypto_mod_put(spawn->alg);
 }
-EXPORT_SYMBOL_GPL(crypto_drop_spawn);
+DEFINE_CRYPTO_API(crypto_drop_spawn);
 
 static struct crypto_alg *crypto_spawn_alg(struct crypto_spawn *spawn)
 {
@@ -841,7 +841,7 @@ static struct crypto_alg *crypto_spawn_alg(struct crypto_spawn *spawn)
 	return alg;
 }
 
-struct crypto_tfm *crypto_spawn_tfm(struct crypto_spawn *spawn, u32 type,
+struct crypto_tfm *CRYPTO_API(crypto_spawn_tfm)(struct crypto_spawn *spawn, u32 type,
 				    u32 mask)
 {
 	struct crypto_alg *alg;
@@ -865,9 +865,9 @@ out_put_alg:
 	crypto_mod_put(alg);
 	return tfm;
 }
-EXPORT_SYMBOL_GPL(crypto_spawn_tfm);
+DEFINE_CRYPTO_API(crypto_spawn_tfm);
 
-void *crypto_spawn_tfm2(struct crypto_spawn *spawn)
+void *CRYPTO_API(crypto_spawn_tfm2)(struct crypto_spawn *spawn)
 {
 	struct crypto_alg *alg;
 	struct crypto_tfm *tfm;
@@ -886,21 +886,21 @@ out_put_alg:
 	crypto_mod_put(alg);
 	return tfm;
 }
-EXPORT_SYMBOL_GPL(crypto_spawn_tfm2);
+DEFINE_CRYPTO_API(crypto_spawn_tfm2);
 
-int crypto_register_notifier(struct notifier_block *nb)
+int CRYPTO_API(crypto_register_notifier)(struct notifier_block *nb)
 {
 	return blocking_notifier_chain_register(&crypto_chain, nb);
 }
-EXPORT_SYMBOL_GPL(crypto_register_notifier);
+DEFINE_CRYPTO_API(crypto_register_notifier);
 
-int crypto_unregister_notifier(struct notifier_block *nb)
+int CRYPTO_API(crypto_unregister_notifier)(struct notifier_block *nb)
 {
 	return blocking_notifier_chain_unregister(&crypto_chain, nb);
 }
-EXPORT_SYMBOL_GPL(crypto_unregister_notifier);
+DEFINE_CRYPTO_API(crypto_unregister_notifier);
 
-struct crypto_attr_type *crypto_get_attr_type(struct rtattr **tb)
+struct crypto_attr_type *CRYPTO_API(crypto_get_attr_type)(struct rtattr **tb)
 {
 	struct rtattr *rta = tb[0];
 	struct crypto_attr_type *algt;
@@ -916,7 +916,7 @@ struct crypto_attr_type *crypto_get_attr_type(struct rtattr **tb)
 
 	return algt;
 }
-EXPORT_SYMBOL_GPL(crypto_get_attr_type);
+DEFINE_CRYPTO_API(crypto_get_attr_type);
 
 /**
  * crypto_check_attr_type() - check algorithm type and compute inherited mask
@@ -934,7 +934,7 @@ EXPORT_SYMBOL_GPL(crypto_get_attr_type);
  *
  * Return: 0 on success; -errno on failure
  */
-int crypto_check_attr_type(struct rtattr **tb, u32 type, u32 *mask_ret)
+int CRYPTO_API(crypto_check_attr_type)(struct rtattr **tb, u32 type, u32 *mask_ret)
 {
 	struct crypto_attr_type *algt;
 
@@ -948,9 +948,9 @@ int crypto_check_attr_type(struct rtattr **tb, u32 type, u32 *mask_ret)
 	*mask_ret = crypto_algt_inherited_mask(algt);
 	return 0;
 }
-EXPORT_SYMBOL_GPL(crypto_check_attr_type);
+DEFINE_CRYPTO_API(crypto_check_attr_type);
 
-const char *crypto_attr_alg_name(struct rtattr *rta)
+const char *CRYPTO_API(crypto_attr_alg_name)(struct rtattr *rta)
 {
 	struct crypto_attr_alg *alga;
 
@@ -966,9 +966,9 @@ const char *crypto_attr_alg_name(struct rtattr *rta)
 
 	return alga->name;
 }
-EXPORT_SYMBOL_GPL(crypto_attr_alg_name);
+DEFINE_CRYPTO_API(crypto_attr_alg_name);
 
-int __crypto_inst_setname(struct crypto_instance *inst, const char *name,
+int CRYPTO_API(__crypto_inst_setname)(struct crypto_instance *inst, const char *name,
 			  const char *driver, struct crypto_alg *alg)
 {
 	if (snprintf(inst->alg.cra_name, CRYPTO_MAX_ALG_NAME, "%s(%s)", name,
@@ -981,18 +981,18 @@ int __crypto_inst_setname(struct crypto_instance *inst, const char *name,
 
 	return 0;
 }
-EXPORT_SYMBOL_GPL(__crypto_inst_setname);
+DEFINE_CRYPTO_API(__crypto_inst_setname);
 
-void crypto_init_queue(struct crypto_queue *queue, unsigned int max_qlen)
+void CRYPTO_API(crypto_init_queue)(struct crypto_queue *queue, unsigned int max_qlen)
 {
 	INIT_LIST_HEAD(&queue->list);
 	queue->backlog = &queue->list;
 	queue->qlen = 0;
 	queue->max_qlen = max_qlen;
 }
-EXPORT_SYMBOL_GPL(crypto_init_queue);
+DEFINE_CRYPTO_API(crypto_init_queue);
 
-int crypto_enqueue_request(struct crypto_queue *queue,
+int CRYPTO_API(crypto_enqueue_request)(struct crypto_queue *queue,
 			   struct crypto_async_request *request)
 {
 	int err = -EINPROGRESS;
@@ -1013,9 +1013,9 @@ int crypto_enqueue_request(struct crypto_queue *queue,
 out:
 	return err;
 }
-EXPORT_SYMBOL_GPL(crypto_enqueue_request);
+DEFINE_CRYPTO_API(crypto_enqueue_request);
 
-void crypto_enqueue_request_head(struct crypto_queue *queue,
+void CRYPTO_API(crypto_enqueue_request_head)(struct crypto_queue *queue,
 				 struct crypto_async_request *request)
 {
 	if (unlikely(queue->qlen >= queue->max_qlen))
@@ -1024,9 +1024,9 @@ void crypto_enqueue_request_head(struct crypto_queue *queue,
 	queue->qlen++;
 	list_add(&request->list, &queue->list);
 }
-EXPORT_SYMBOL_GPL(crypto_enqueue_request_head);
+DEFINE_CRYPTO_API(crypto_enqueue_request_head);
 
-struct crypto_async_request *crypto_dequeue_request(struct crypto_queue *queue)
+struct crypto_async_request *CRYPTO_API(crypto_dequeue_request)(struct crypto_queue *queue)
 {
 	struct list_head *request;
 
@@ -1043,7 +1043,7 @@ struct crypto_async_request *crypto_dequeue_request(struct crypto_queue *queue)
 
 	return list_entry(request, struct crypto_async_request, list);
 }
-EXPORT_SYMBOL_GPL(crypto_dequeue_request);
+DEFINE_CRYPTO_API(crypto_dequeue_request);
 
 static inline void crypto_inc_byte(u8 *a, unsigned int size)
 {
@@ -1058,7 +1058,7 @@ static inline void crypto_inc_byte(u8 *a, unsigned int size)
 	}
 }
 
-void crypto_inc(u8 *a, unsigned int size)
+void CRYPTO_API(crypto_inc)(u8 *a, unsigned int size)
 {
 	__be32 *b = (__be32 *)(a + size);
 	u32 c;
@@ -1074,16 +1074,16 @@ void crypto_inc(u8 *a, unsigned int size)
 
 	crypto_inc_byte(a, size);
 }
-EXPORT_SYMBOL_GPL(crypto_inc);
+DEFINE_CRYPTO_API(crypto_inc);
 
-unsigned int crypto_alg_extsize(struct crypto_alg *alg)
+unsigned int CRYPTO_API(crypto_alg_extsize)(struct crypto_alg *alg)
 {
 	return alg->cra_ctxsize +
 	       (alg->cra_alignmask & ~(crypto_tfm_ctx_alignment() - 1));
 }
-EXPORT_SYMBOL_GPL(crypto_alg_extsize);
+DEFINE_CRYPTO_API(crypto_alg_extsize);
 
-int crypto_type_has_alg(const char *name, const struct crypto_type *frontend,
+int CRYPTO_API(crypto_type_has_alg)(const char *name, const struct crypto_type *frontend,
 			u32 type, u32 mask)
 {
 	int ret = 0;
@@ -1096,7 +1096,7 @@ int crypto_type_has_alg(const char *name, const struct crypto_type *frontend,
 
 	return ret;
 }
-EXPORT_SYMBOL_GPL(crypto_type_has_alg);
+DEFINE_CRYPTO_API(crypto_type_has_alg);
 
 static void __init crypto_start_tests(void)
 {
@@ -1166,8 +1166,8 @@ static void __exit crypto_algapi_exit(void)
  * We run this at late_initcall so that all the built-in algorithms
  * have had a chance to register themselves first.
  */
-late_initcall(crypto_algapi_init);
-module_exit(crypto_algapi_exit);
+crypto_late_initcall(crypto_algapi_init);
+crypto_module_exit(crypto_algapi_exit);
 
 MODULE_LICENSE("GPL");
 MODULE_DESCRIPTION("Cryptographic algorithms API");

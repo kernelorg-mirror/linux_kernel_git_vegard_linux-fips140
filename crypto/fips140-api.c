@@ -223,3 +223,47 @@ DEFINE_CRYPTO_API_STUB(akcipher_register_instance);
 
 #endif
 
+/*
+ * crypto/algapi.c
+ */
+#if !IS_BUILTIN(CONFIG_CRYPTO_ALGAPI2)
+
+#include <crypto/algapi.h>
+
+DEFINE_CRYPTO_API_STUB(crypto_register_alg);
+DEFINE_CRYPTO_API_STUB(crypto_unregister_alg);
+DEFINE_CRYPTO_API_STUB(crypto_register_algs);
+DEFINE_CRYPTO_API_STUB(crypto_unregister_algs);
+DEFINE_CRYPTO_API_STUB(crypto_register_template);
+DEFINE_CRYPTO_API_STUB(crypto_register_templates);
+DEFINE_CRYPTO_API_STUB(crypto_unregister_template);
+DEFINE_CRYPTO_API_STUB(crypto_unregister_templates);
+DEFINE_CRYPTO_API_STUB(crypto_lookup_template);
+DEFINE_CRYPTO_API_STUB(crypto_register_instance);
+DEFINE_CRYPTO_API_STUB(crypto_unregister_instance);
+DEFINE_CRYPTO_API_STUB(crypto_grab_spawn);
+DEFINE_CRYPTO_API_STUB(crypto_drop_spawn);
+DEFINE_CRYPTO_API_STUB(crypto_spawn_tfm);
+DEFINE_CRYPTO_API_STUB(crypto_spawn_tfm2);
+DEFINE_CRYPTO_API_STUB(crypto_get_attr_type);
+DEFINE_CRYPTO_API_STUB(crypto_check_attr_type);
+DEFINE_CRYPTO_API_STUB(crypto_attr_alg_name);
+DEFINE_CRYPTO_API_STUB(__crypto_inst_setname);
+DEFINE_CRYPTO_API_STUB(crypto_init_queue);
+DEFINE_CRYPTO_API_STUB(crypto_enqueue_request);
+DEFINE_CRYPTO_API_STUB(crypto_enqueue_request_head);
+DEFINE_CRYPTO_API_STUB(crypto_dequeue_request);
+DEFINE_CRYPTO_API_STUB(crypto_inc);
+DEFINE_CRYPTO_API_STUB(crypto_register_notifier);
+DEFINE_CRYPTO_API_STUB(crypto_unregister_notifier);
+
+#include <crypto/internal.h>
+
+DEFINE_CRYPTO_API_STUB(crypto_alg_tested);
+DEFINE_CRYPTO_API_STUB(crypto_remove_spawns);
+DEFINE_CRYPTO_API_STUB(crypto_remove_final);
+DEFINE_CRYPTO_API_STUB(crypto_alg_extsize);
+DEFINE_CRYPTO_API_STUB(crypto_type_has_alg);
+
+#endif
+
