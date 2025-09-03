@@ -116,3 +116,14 @@ DEFINE_CRYPTO_API_STUB(hmac_sha512_usingrawkey);
 
 #endif
 
+/*
+ * lib/crypto/utils.c
+ */
+#if !IS_BUILTIN(CONFIG_CRYPTO_LIB_UTILS)
+
+#include <crypto/utils.h>
+
+DEFINE_CRYPTO_API_STUB(__crypto_xor);
+
+#endif
+

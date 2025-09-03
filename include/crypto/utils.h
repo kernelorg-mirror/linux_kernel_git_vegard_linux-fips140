@@ -12,7 +12,9 @@
 #include <linux/compiler_attributes.h>
 #include <linux/types.h>
 
-void __crypto_xor(u8 *dst, const u8 *src1, const u8 *src2, unsigned int size);
+DECLARE_CRYPTO_API(__crypto_xor, void,
+	(u8 *dst, const u8 *src1, const u8 *src2, unsigned int size),
+	(dst, src1, src2, size));
 
 static inline void crypto_xor(u8 *dst, const u8 *src, unsigned int size)
 {
