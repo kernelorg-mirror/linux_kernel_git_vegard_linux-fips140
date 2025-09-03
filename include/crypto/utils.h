@@ -7,6 +7,7 @@
 #ifndef _CRYPTO_UTILS_H
 #define _CRYPTO_UTILS_H
 
+#include <crypto/api.h>
 #include <linux/unaligned.h>
 #include <linux/compiler_attributes.h>
 #include <linux/types.h>
@@ -53,7 +54,9 @@ static inline void crypto_xor_cpy(u8 *dst, const u8 *src1, const u8 *src2,
 	}
 }
 
-noinline unsigned long __crypto_memneq(const void *a, const void *b, size_t size);
+DECLARE_CRYPTO_API(__crypto_memneq, unsigned long,
+	(const void *a, const void *b, size_t size),
+	(a, b, size));
 
 /**
  * crypto_memneq - Compare two areas of memory without leaking
