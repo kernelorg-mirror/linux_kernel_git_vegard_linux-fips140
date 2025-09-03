@@ -410,3 +410,16 @@ DEFINE_CRYPTO_API_STUB(crypto_ecdh_decode_key);
 
 #endif
 
+/*
+ * crypto/geniv.c
+ */
+#if !IS_BUILTIN(CONFIG_CRYPTO_GENIV)
+
+#include <crypto/internal/geniv.h>
+
+DEFINE_CRYPTO_API_STUB(aead_geniv_alloc);
+DEFINE_CRYPTO_API_STUB(aead_init_geniv);
+DEFINE_CRYPTO_API_STUB(aead_exit_geniv);
+
+#endif
+
