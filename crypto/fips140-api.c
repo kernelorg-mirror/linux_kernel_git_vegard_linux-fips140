@@ -423,3 +423,22 @@ DEFINE_CRYPTO_API_STUB(aead_exit_geniv);
 
 #endif
 
+/*
+ * crypto/kpp.c
+ */
+#if !IS_BUILTIN(CONFIG_CRYPTO_KPP2)
+
+#include <crypto/kpp.h>
+
+DEFINE_CRYPTO_API_STUB(crypto_alloc_kpp);
+DEFINE_CRYPTO_API_STUB(crypto_has_kpp);
+
+#include <crypto/internal/kpp.h>
+
+DEFINE_CRYPTO_API_STUB(crypto_register_kpp);
+DEFINE_CRYPTO_API_STUB(crypto_unregister_kpp);
+DEFINE_CRYPTO_API_STUB(kpp_register_instance);
+DEFINE_CRYPTO_API_STUB(crypto_grab_kpp);
+
+#endif
+
