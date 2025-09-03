@@ -158,14 +158,14 @@ static void keccakf(u64 st[25])
 	}
 }
 
-int crypto_sha3_init(struct shash_desc *desc)
+int CRYPTO_API(crypto_sha3_init)(struct shash_desc *desc)
 {
 	struct sha3_state *sctx = shash_desc_ctx(desc);
 
 	memset(sctx->st, 0, sizeof(sctx->st));
 	return 0;
 }
-EXPORT_SYMBOL(crypto_sha3_init);
+DEFINE_CRYPTO_API(crypto_sha3_init);
 
 static int crypto_sha3_update(struct shash_desc *desc, const u8 *data,
 			      unsigned int len)
@@ -274,8 +274,8 @@ static void __exit sha3_generic_mod_fini(void)
 	crypto_unregister_shashes(algs, ARRAY_SIZE(algs));
 }
 
-module_init(sha3_generic_mod_init);
-module_exit(sha3_generic_mod_fini);
+crypto_module_init(sha3_generic_mod_init);
+crypto_module_exit(sha3_generic_mod_fini);
 
 MODULE_LICENSE("GPL");
 MODULE_DESCRIPTION("SHA-3 Secure Hash Algorithm");

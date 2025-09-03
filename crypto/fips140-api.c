@@ -500,3 +500,14 @@ DEFINE_CRYPTO_API_STUB(rsa_parse_priv_key);
 
 #endif
 
+/*
+ * crypto/sha3_generic.c
+ */
+#if !IS_BUILTIN(CONFIG_CRYPTO_SHA3)
+
+#include <crypto/sha3.h>
+
+DEFINE_CRYPTO_API_STUB(crypto_sha3_init);
+
+#endif
+
