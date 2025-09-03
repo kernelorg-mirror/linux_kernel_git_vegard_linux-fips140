@@ -20,7 +20,7 @@
 /*
  * Destroy a public key signature.
  */
-void public_key_signature_free(struct public_key_signature *sig)
+void CRYPTO_API(public_key_signature_free)(struct public_key_signature *sig)
 {
 	int i;
 
@@ -32,14 +32,14 @@ void public_key_signature_free(struct public_key_signature *sig)
 		kfree(sig);
 	}
 }
-EXPORT_SYMBOL_GPL(public_key_signature_free);
+DEFINE_CRYPTO_API(public_key_signature_free);
 
 /**
  * query_asymmetric_key - Get information about an asymmetric key.
  * @params: Various parameters.
  * @info: Where to put the information.
  */
-int query_asymmetric_key(const struct kernel_pkey_params *params,
+int CRYPTO_API(query_asymmetric_key)(const struct kernel_pkey_params *params,
 			 struct kernel_pkey_query *info)
 {
 	const struct asymmetric_key_subtype *subtype;
@@ -62,7 +62,7 @@ int query_asymmetric_key(const struct kernel_pkey_params *params,
 	pr_devel("<==%s() = %d\n", __func__, ret);
 	return ret;
 }
-EXPORT_SYMBOL_GPL(query_asymmetric_key);
+DEFINE_CRYPTO_API(query_asymmetric_key);
 
 /**
  * verify_signature - Initiate the use of an asymmetric key to verify a signature
@@ -71,7 +71,7 @@ EXPORT_SYMBOL_GPL(query_asymmetric_key);
  *
  * Returns 0 if successful or else an error.
  */
-int verify_signature(const struct key *key,
+int CRYPTO_API(verify_signature)(const struct key *key,
 		     const struct public_key_signature *sig)
 {
 	const struct asymmetric_key_subtype *subtype;
@@ -93,4 +93,4 @@ int verify_signature(const struct key *key,
 	pr_devel("<==%s() = %d\n", __func__, ret);
 	return ret;
 }
-EXPORT_SYMBOL_GPL(verify_signature);
+DEFINE_CRYPTO_API(verify_signature);

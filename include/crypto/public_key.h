@@ -54,7 +54,9 @@ struct public_key_signature {
 	const char *encoding;
 };
 
-extern void public_key_signature_free(struct public_key_signature *sig);
+DECLARE_CRYPTO_API(public_key_signature_free, void,
+	(struct public_key_signature *sig),
+	(sig));
 
 extern struct asymmetric_key_subtype public_key_subtype;
 
@@ -104,11 +106,13 @@ static inline int restrict_link_by_digsig(struct key *dest_keyring,
 }
 #endif
 
-extern int query_asymmetric_key(const struct kernel_pkey_params *,
-				struct kernel_pkey_query *);
+DECLARE_CRYPTO_API(query_asymmetric_key, int,
+	(const struct kernel_pkey_params *arg1, struct kernel_pkey_query *arg2),
+	(arg1, arg2));
 
-extern int verify_signature(const struct key *,
-			    const struct public_key_signature *);
+DECLARE_CRYPTO_API(verify_signature, int,
+	(const struct key *arg1, const struct public_key_signature *arg2),
+	(arg1, arg2));
 
 #if IS_REACHABLE(CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE)
 DECLARE_CRYPTO_API(public_key_verify_signature, int,

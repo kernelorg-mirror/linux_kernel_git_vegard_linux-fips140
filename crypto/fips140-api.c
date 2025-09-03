@@ -687,3 +687,16 @@ DEFINE_CRYPTO_API_STUB(public_key_verify_signature);
 
 #endif
 
+/*
+ * crypto/asymmetric_keys/signature.c
+ */
+#if !IS_BUILTIN(CONFIG_ASYMMETRIC_KEY_TYPE)
+
+#include <crypto/public_key.h>
+
+DEFINE_CRYPTO_API_STUB(public_key_signature_free);
+DEFINE_CRYPTO_API_STUB(query_asymmetric_key);
+DEFINE_CRYPTO_API_STUB(verify_signature);
+
+#endif
+
