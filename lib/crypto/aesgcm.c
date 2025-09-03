@@ -42,7 +42,7 @@ static void aesgcm_encrypt_block(const struct crypto_aes_ctx *ctx, void *dst,
  * Returns: 0 on success, or -EINVAL if @keysize or @authsize contain values
  * that are not permitted by the GCM specification.
  */
-int aesgcm_expandkey(struct aesgcm_ctx *ctx, const u8 *key,
+int CRYPTO_API(aesgcm_expandkey)(struct aesgcm_ctx *ctx, const u8 *key,
 		     unsigned int keysize, unsigned int authsize)
 {
 	u8 kin[AES_BLOCK_SIZE] = {};
@@ -58,7 +58,7 @@ int aesgcm_expandkey(struct aesgcm_ctx *ctx, const u8 *key,
 
 	return 0;
 }
-EXPORT_SYMBOL(aesgcm_expandkey);
+DEFINE_CRYPTO_API(aesgcm_expandkey);
 
 static void aesgcm_ghash(be128 *ghash, const be128 *key, const void *src,
 			 int len)
@@ -144,7 +144,7 @@ static void aesgcm_crypt(const struct aesgcm_ctx *ctx, u8 *dst, const u8 *src,
  *		tag should be stored. The buffer is assumed to have space for
  *		@ctx->authsize bytes.
  */
-void aesgcm_encrypt(const struct aesgcm_ctx *ctx, u8 *dst, const u8 *src,
+void CRYPTO_API(aesgcm_encrypt)(const struct aesgcm_ctx *ctx, u8 *dst, const u8 *src,
 		    int crypt_len, const u8 *assoc, int assoc_len,
 		    const u8 iv[GCM_AES_IV_SIZE], u8 *authtag)
 {
@@ -155,7 +155,7 @@ void aesgcm_encrypt(const struct aesgcm_ctx *ctx, u8 *dst, const u8 *src,
 	aesgcm_crypt(ctx, dst, src, crypt_len, ctr);
 	aesgcm_mac(ctx, dst, crypt_len, assoc, assoc_len, ctr, authtag);
 }
-EXPORT_SYMBOL(aesgcm_encrypt);
+DEFINE_CRYPTO_API(aesgcm_encrypt);
 
 /**
  * aesgcm_decrypt - Perform AES-GCM decryption on a block of data
@@ -174,7 +174,7 @@ EXPORT_SYMBOL(aesgcm_encrypt);
  * Returns: true on success, or false if the ciphertext failed authentication.
  * On failure, no plaintext will be returned.
  */
-bool __must_check aesgcm_decrypt(const struct aesgcm_ctx *ctx, u8 *dst,
+bool __must_check CRYPTO_API(aesgcm_decrypt)(const struct aesgcm_ctx *ctx, u8 *dst,
 				 const u8 *src, int crypt_len, const u8 *assoc,
 				 int assoc_len, const u8 iv[GCM_AES_IV_SIZE],
 				 const u8 *authtag)
@@ -192,7 +192,7 @@ bool __must_check aesgcm_decrypt(const struct aesgcm_ctx *ctx, u8 *dst,
 	aesgcm_crypt(ctx, dst, src, crypt_len, ctr);
 	return true;
 }
-EXPORT_SYMBOL(aesgcm_decrypt);
+DEFINE_CRYPTO_API(aesgcm_decrypt);
 
 MODULE_DESCRIPTION("Generic AES-GCM library");
 MODULE_AUTHOR("Ard Biesheuvel <ardb@kernel.org>");
@@ -730,10 +730,10 @@ static int __init libaesgcm_init(void)
 	}
 	return 0;
 }
-module_init(libaesgcm_init);
+crypto_module_init(libaesgcm_init);
 
 static void __exit libaesgcm_exit(void)
 {
 }
-module_exit(libaesgcm_exit);
+crypto_module_exit(libaesgcm_exit);
 #endif

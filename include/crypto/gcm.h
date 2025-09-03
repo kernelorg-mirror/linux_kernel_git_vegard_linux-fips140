@@ -1,6 +1,7 @@
 #ifndef _CRYPTO_GCM_H
 #define _CRYPTO_GCM_H
 
+#include <crypto/api.h>
 #include <linux/errno.h>
 
 #include <crypto/aes.h>
@@ -70,16 +71,16 @@ struct aesgcm_ctx {
 	unsigned int		authsize;
 };
 
-int aesgcm_expandkey(struct aesgcm_ctx *ctx, const u8 *key,
-		     unsigned int keysize, unsigned int authsize);
+DECLARE_CRYPTO_API(aesgcm_expandkey, int,
+	(struct aesgcm_ctx *ctx, const u8 *key, unsigned int keysize, unsigned int authsize),
+	(ctx, key, keysize, authsize));
 
-void aesgcm_encrypt(const struct aesgcm_ctx *ctx, u8 *dst, const u8 *src,
-		    int crypt_len, const u8 *assoc, int assoc_len,
-		    const u8 iv[GCM_AES_IV_SIZE], u8 *authtag);
+DECLARE_CRYPTO_API(aesgcm_encrypt, void,
+	(const struct aesgcm_ctx *ctx, u8 *dst, const u8 *src, int crypt_len, const u8 *assoc, int assoc_len, const u8 iv[GCM_AES_IV_SIZE], u8 *authtag),
+	(ctx, dst, src, crypt_len, assoc, assoc_len, iv, authtag));
 
-bool __must_check aesgcm_decrypt(const struct aesgcm_ctx *ctx, u8 *dst,
-				 const u8 *src, int crypt_len, const u8 *assoc,
-				 int assoc_len, const u8 iv[GCM_AES_IV_SIZE],
-				 const u8 *authtag);
+DECLARE_CRYPTO_API(aesgcm_decrypt, bool __must_check,
+	(const struct aesgcm_ctx *ctx, u8 *dst, const u8 *src, int crypt_len, const u8 *assoc, int assoc_len, const u8 iv[GCM_AES_IV_SIZE], const u8 *authtag),
+	(ctx, dst, src, crypt_len, assoc, assoc_len, iv, authtag));
 
 #endif

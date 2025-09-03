@@ -19,3 +19,16 @@ DEFINE_CRYPTO_API_STUB(aes_decrypt);
 
 #endif
 
+/*
+ * lib/crypto/aesgcm.c
+ */
+#if !IS_BUILTIN(CONFIG_CRYPTO_LIB_AESGCM)
+
+#include <crypto/gcm.h>
+
+DEFINE_CRYPTO_API_STUB(aesgcm_expandkey);
+DEFINE_CRYPTO_API_STUB(aesgcm_encrypt);
+DEFINE_CRYPTO_API_STUB(aesgcm_decrypt);
+
+#endif
+
