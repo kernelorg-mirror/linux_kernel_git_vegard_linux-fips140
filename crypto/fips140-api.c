@@ -466,3 +466,25 @@ DEFINE_CRYPTO_API_STUB(lskcipher_alloc_instance_simple);
 
 #endif
 
+/*
+ * crypto/rng.c
+ */
+#if !IS_BUILTIN(CONFIG_CRYPTO_RNG2)
+
+#include <crypto/rng.h>
+
+DEFINE_CRYPTO_API_STUB(crypto_get_default_rng);
+DEFINE_CRYPTO_API_STUB(crypto_put_default_rng);
+DEFINE_CRYPTO_API_STUB(crypto_alloc_rng);
+DEFINE_CRYPTO_API_STUB(crypto_rng_reset);
+
+#include <crypto/internal/rng.h>
+
+DEFINE_CRYPTO_API_STUB(crypto_register_rng);
+DEFINE_CRYPTO_API_STUB(crypto_unregister_rng);
+DEFINE_CRYPTO_API_STUB(crypto_register_rngs);
+DEFINE_CRYPTO_API_STUB(crypto_unregister_rngs);
+DEFINE_CRYPTO_API_STUB(crypto_del_default_rng);
+
+#endif
+
