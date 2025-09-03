@@ -168,7 +168,7 @@ static void gf128mul_x8_bbe(be128 *x)
 	x->b = cpu_to_be64((b << 8) ^ _tt);
 }
 
-void gf128mul_x8_ble(le128 *r, const le128 *x)
+void CRYPTO_API(gf128mul_x8_ble)(le128 *r, const le128 *x)
 {
 	u64 a = le64_to_cpu(x->a);
 	u64 b = le64_to_cpu(x->b);
@@ -177,9 +177,9 @@ void gf128mul_x8_ble(le128 *r, const le128 *x)
 	r->a = cpu_to_le64((a << 8) | (b >> 56));
 	r->b = cpu_to_le64((b << 8) ^ _tt);
 }
-EXPORT_SYMBOL(gf128mul_x8_ble);
+DEFINE_CRYPTO_API(gf128mul_x8_ble);
 
-void gf128mul_lle(be128 *r, const be128 *b)
+void CRYPTO_API(gf128mul_lle)(be128 *r, const be128 *b)
 {
 	/*
 	 * The p array should be aligned to twice the size of its element type,
@@ -224,7 +224,7 @@ void gf128mul_lle(be128 *r, const be128 *b)
 		gf128mul_x8_lle_ti(r); /* use the time invariant version */
 	}
 }
-EXPORT_SYMBOL(gf128mul_lle);
+DEFINE_CRYPTO_API(gf128mul_lle);
 
 /*      This version uses 64k bytes of table space.
     A 16 byte buffer has to be multiplied by a 16 byte key
@@ -240,7 +240,7 @@ EXPORT_SYMBOL(gf128mul_lle);
  * t[1][BYTE] contains g*x^8*BYTE
  *  ..
  * t[15][BYTE] contains g*x^120*BYTE */
-struct gf128mul_64k *gf128mul_init_64k_bbe(const be128 *g)
+struct gf128mul_64k *CRYPTO_API(gf128mul_init_64k_bbe)(const be128 *g)
 {
 	struct gf128mul_64k *t;
 	int i, j, k;
@@ -280,9 +280,9 @@ struct gf128mul_64k *gf128mul_init_64k_bbe(const be128 *g)
 out:
 	return t;
 }
-EXPORT_SYMBOL(gf128mul_init_64k_bbe);
+DEFINE_CRYPTO_API(gf128mul_init_64k_bbe);
 
-void gf128mul_free_64k(struct gf128mul_64k *t)
+void CRYPTO_API(gf128mul_free_64k)(struct gf128mul_64k *t)
 {
 	int i;
 
@@ -290,9 +290,9 @@ void gf128mul_free_64k(struct gf128mul_64k *t)
 		kfree_sensitive(t->t[i]);
 	kfree_sensitive(t);
 }
-EXPORT_SYMBOL(gf128mul_free_64k);
+DEFINE_CRYPTO_API(gf128mul_free_64k);
 
-void gf128mul_64k_bbe(be128 *a, const struct gf128mul_64k *t)
+void CRYPTO_API(gf128mul_64k_bbe)(be128 *a, const struct gf128mul_64k *t)
 {
 	u8 *ap = (u8 *)a;
 	be128 r[1];
@@ -303,7 +303,7 @@ void gf128mul_64k_bbe(be128 *a, const struct gf128mul_64k *t)
 		be128_xor(r, r, &t->t[i]->t[ap[15 - i]]);
 	*a = *r;
 }
-EXPORT_SYMBOL(gf128mul_64k_bbe);
+DEFINE_CRYPTO_API(gf128mul_64k_bbe);
 
 /*      This version uses 4k bytes of table space.
     A 16 byte buffer has to be multiplied by a 16 byte key
@@ -321,7 +321,7 @@ EXPORT_SYMBOL(gf128mul_64k_bbe);
     lower byte in the buffer, stopping when we reach the
     lowest byte. This requires a 4096 byte table.
 */
-struct gf128mul_4k *gf128mul_init_4k_lle(const be128 *g)
+struct gf128mul_4k *CRYPTO_API(gf128mul_init_4k_lle)(const be128 *g)
 {
 	struct gf128mul_4k *t;
 	int j, k;
@@ -341,9 +341,9 @@ struct gf128mul_4k *gf128mul_init_4k_lle(const be128 *g)
 out:
 	return t;
 }
-EXPORT_SYMBOL(gf128mul_init_4k_lle);
+DEFINE_CRYPTO_API(gf128mul_init_4k_lle);
 
-void gf128mul_4k_lle(be128 *a, const struct gf128mul_4k *t)
+void CRYPTO_API(gf128mul_4k_lle)(be128 *a, const struct gf128mul_4k *t)
 {
 	u8 *ap = (u8 *)a;
 	be128 r[1];
@@ -356,7 +356,7 @@ void gf128mul_4k_lle(be128 *a, const struct gf128mul_4k *t)
 	}
 	*a = *r;
 }
-EXPORT_SYMBOL(gf128mul_4k_lle);
+DEFINE_CRYPTO_API(gf128mul_4k_lle);
 
 MODULE_LICENSE("GPL");
 MODULE_DESCRIPTION("Functions for multiplying elements of GF(2^128)");

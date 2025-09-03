@@ -49,6 +49,7 @@
 #ifndef _CRYPTO_GF128MUL_H
 #define _CRYPTO_GF128MUL_H
 
+#include <crypto/api.h>
 #include <asm/byteorder.h>
 #include <crypto/b128ops.h>
 #include <linux/slab.h>
@@ -160,7 +161,9 @@
 
 /*	A slow generic version of gf_mul, implemented for lle
  * 	It multiplies a and b and puts the result in a */
-void gf128mul_lle(be128 *a, const be128 *b);
+DECLARE_CRYPTO_API(gf128mul_lle, void,
+	(be128 *a, const be128 *b),
+	(a, b));
 
 /*
  * The following functions multiply a field element by x in
@@ -221,9 +224,15 @@ struct gf128mul_4k {
 	be128 t[256];
 };
 
-struct gf128mul_4k *gf128mul_init_4k_lle(const be128 *g);
-void gf128mul_4k_lle(be128 *a, const struct gf128mul_4k *t);
-void gf128mul_x8_ble(le128 *r, const le128 *x);
+DECLARE_CRYPTO_API(gf128mul_init_4k_lle, struct gf128mul_4k *,
+	(const be128 *g),
+	(g));
+DECLARE_CRYPTO_API(gf128mul_4k_lle, void,
+	(be128 *a, const struct gf128mul_4k *t),
+	(a, t));
+DECLARE_CRYPTO_API(gf128mul_x8_ble, void,
+	(le128 *r, const le128 *x),
+	(r, x));
 static inline void gf128mul_free_4k(struct gf128mul_4k *t)
 {
 	kfree_sensitive(t);
@@ -241,8 +250,14 @@ struct gf128mul_64k {
  * factor in the first argument, and the table in the second.
  * Afterwards, the result is stored in *a.
  */
-struct gf128mul_64k *gf128mul_init_64k_bbe(const be128 *g);
-void gf128mul_free_64k(struct gf128mul_64k *t);
-void gf128mul_64k_bbe(be128 *a, const struct gf128mul_64k *t);
+DECLARE_CRYPTO_API(gf128mul_init_64k_bbe, struct gf128mul_64k *,
+	(const be128 *g),
+	(g));
+DECLARE_CRYPTO_API(gf128mul_free_64k, void,
+	(struct gf128mul_64k *t),
+	(t));
+DECLARE_CRYPTO_API(gf128mul_64k_bbe, void,
+	(be128 *a, const struct gf128mul_64k *t),
+	(a, t));
 
 #endif /* _CRYPTO_GF128MUL_H */

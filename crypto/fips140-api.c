@@ -32,3 +32,20 @@ DEFINE_CRYPTO_API_STUB(aesgcm_decrypt);
 
 #endif
 
+/*
+ * lib/crypto/gf128mul.c
+ */
+#if !IS_BUILTIN(CONFIG_CRYPTO_LIB_GF128MUL)
+
+#include <crypto/gf128mul.h>
+
+DEFINE_CRYPTO_API_STUB(gf128mul_lle);
+DEFINE_CRYPTO_API_STUB(gf128mul_init_4k_lle);
+DEFINE_CRYPTO_API_STUB(gf128mul_4k_lle);
+DEFINE_CRYPTO_API_STUB(gf128mul_x8_ble);
+DEFINE_CRYPTO_API_STUB(gf128mul_init_64k_bbe);
+DEFINE_CRYPTO_API_STUB(gf128mul_free_64k);
+DEFINE_CRYPTO_API_STUB(gf128mul_64k_bbe);
+
+#endif
+
