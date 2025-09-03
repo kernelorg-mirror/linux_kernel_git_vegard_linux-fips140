@@ -313,3 +313,17 @@ DEFINE_CRYPTO_API_STUB(crypto_authenc_extractkeys);
 
 #endif
 
+/*
+ * crypto/cipher.c
+ */
+#if !IS_BUILTIN(CONFIG_CRYPTO)
+
+#include <crypto/internal/cipher.h>
+
+DEFINE_CRYPTO_API_STUB(crypto_cipher_setkey);
+DEFINE_CRYPTO_API_STUB(crypto_cipher_encrypt_one);
+DEFINE_CRYPTO_API_STUB(crypto_cipher_decrypt_one);
+DEFINE_CRYPTO_API_STUB(crypto_clone_cipher);
+
+#endif
+
