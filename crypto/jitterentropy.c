@@ -146,9 +146,10 @@ struct rand_data {
 #define JENT_ENTROPY_SAFETY_FACTOR	64
 
 #include <linux/array_size.h>
-#include <linux/fips.h>
 #include <linux/minmax.h>
 #include "jitterentropy.h"
+
+extern int fips_enabled;
 
 /***************************************************************************
  * Adaptive Proportion Test
