@@ -8,6 +8,7 @@
 #ifndef _CRYPTO_SKCIPHER_H
 #define _CRYPTO_SKCIPHER_H
 
+#include <crypto/api.h>
 #include <linux/atomic.h>
 #include <linux/container_of.h>
 #include <linux/crypto.h>
@@ -297,8 +298,9 @@ struct crypto_sync_skcipher *crypto_alloc_sync_skcipher(const char *alg_name,
  * Return: allocated cipher handle in case of success; IS_ERR() is true in case
  *	   of an error, PTR_ERR() returns the error code.
  */
-struct crypto_lskcipher *crypto_alloc_lskcipher(const char *alg_name,
-						u32 type, u32 mask);
+DECLARE_CRYPTO_API(crypto_alloc_lskcipher, struct crypto_lskcipher *,
+	(const char *alg_name, u32 type, u32 mask),
+	(alg_name, type, mask));
 
 static inline struct crypto_tfm *crypto_skcipher_tfm(
 	struct crypto_skcipher *tfm)
@@ -636,8 +638,9 @@ static inline int crypto_sync_skcipher_setkey(struct crypto_sync_skcipher *tfm,
  *
  * Return: 0 if the setting of the key was successful; < 0 if an error occurred
  */
-int crypto_lskcipher_setkey(struct crypto_lskcipher *tfm,
-			    const u8 *key, unsigned int keylen);
+DECLARE_CRYPTO_API(crypto_lskcipher_setkey, int,
+	(struct crypto_lskcipher *tfm, const u8 *key, unsigned int keylen),
+	(tfm, key, keylen));
 
 static inline unsigned int crypto_skcipher_min_keysize(
 	struct crypto_skcipher *tfm)
@@ -761,8 +764,9 @@ int crypto_skcipher_import(struct skcipher_request *req, const void *in);
  *	   then this many bytes have been left unprocessed;
  *	   < 0 if an error occurred
  */
-int crypto_lskcipher_encrypt(struct crypto_lskcipher *tfm, const u8 *src,
-			     u8 *dst, unsigned len, u8 *siv);
+DECLARE_CRYPTO_API(crypto_lskcipher_encrypt, int,
+	(struct crypto_lskcipher *tfm, const u8 *src, u8 *dst, unsigned len, u8 *siv),
+	(tfm, src, dst, len, siv));
 
 /**
  * crypto_lskcipher_decrypt() - decrypt ciphertext
@@ -781,8 +785,9 @@ int crypto_lskcipher_encrypt(struct crypto_lskcipher *tfm, const u8 *src,
  *	   then this many bytes have been left unprocessed;
  *	   < 0 if an error occurred
  */
-int crypto_lskcipher_decrypt(struct crypto_lskcipher *tfm, const u8 *src,
-			     u8 *dst, unsigned len, u8 *siv);
+DECLARE_CRYPTO_API(crypto_lskcipher_decrypt, int,
+	(struct crypto_lskcipher *tfm, const u8 *src, u8 *dst, unsigned len, u8 *siv),
+	(tfm, src, dst, len, siv));
 
 /**
  * DOC: Symmetric Key Cipher Request Handle

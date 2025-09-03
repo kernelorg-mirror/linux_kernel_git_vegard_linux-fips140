@@ -442,3 +442,27 @@ DEFINE_CRYPTO_API_STUB(crypto_grab_kpp);
 
 #endif
 
+/*
+ * crypto/lskcipher.c
+ */
+#if !IS_BUILTIN(CONFIG_CRYPTO_SKCIPHER2)
+
+#include <crypto/skcipher.h>
+
+DEFINE_CRYPTO_API_STUB(crypto_alloc_lskcipher);
+DEFINE_CRYPTO_API_STUB(crypto_lskcipher_setkey);
+DEFINE_CRYPTO_API_STUB(crypto_lskcipher_encrypt);
+DEFINE_CRYPTO_API_STUB(crypto_lskcipher_decrypt);
+
+#include <crypto/internal/skcipher.h>
+
+DEFINE_CRYPTO_API_STUB(crypto_grab_lskcipher);
+DEFINE_CRYPTO_API_STUB(crypto_register_lskcipher);
+DEFINE_CRYPTO_API_STUB(crypto_unregister_lskcipher);
+DEFINE_CRYPTO_API_STUB(crypto_register_lskciphers);
+DEFINE_CRYPTO_API_STUB(crypto_unregister_lskciphers);
+DEFINE_CRYPTO_API_STUB(lskcipher_register_instance);
+DEFINE_CRYPTO_API_STUB(lskcipher_alloc_instance_simple);
+
+#endif
+

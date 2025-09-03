@@ -8,6 +8,7 @@
 #ifndef _CRYPTO_INTERNAL_SKCIPHER_H
 #define _CRYPTO_INTERNAL_SKCIPHER_H
 
+#include <crypto/api.h>
 #include <crypto/algapi.h>
 #include <crypto/internal/cipher.h>
 #include <crypto/scatterwalk.h>
@@ -100,9 +101,9 @@ int crypto_grab_skcipher(struct crypto_skcipher_spawn *spawn,
 			 struct crypto_instance *inst,
 			 const char *name, u32 type, u32 mask);
 
-int crypto_grab_lskcipher(struct crypto_lskcipher_spawn *spawn,
-			  struct crypto_instance *inst,
-			  const char *name, u32 type, u32 mask);
+DECLARE_CRYPTO_API(crypto_grab_lskcipher, int,
+	(struct crypto_lskcipher_spawn *spawn, struct crypto_instance *inst, const char *name, u32 type, u32 mask),
+	(spawn, inst, name, type, mask));
 
 static inline void crypto_drop_skcipher(struct crypto_skcipher_spawn *spawn)
 {
@@ -164,12 +165,21 @@ void crypto_unregister_skciphers(struct skcipher_alg *algs, int count);
 int skcipher_register_instance(struct crypto_template *tmpl,
 			       struct skcipher_instance *inst);
 
-int crypto_register_lskcipher(struct lskcipher_alg *alg);
-void crypto_unregister_lskcipher(struct lskcipher_alg *alg);
-int crypto_register_lskciphers(struct lskcipher_alg *algs, int count);
-void crypto_unregister_lskciphers(struct lskcipher_alg *algs, int count);
-int lskcipher_register_instance(struct crypto_template *tmpl,
-				struct lskcipher_instance *inst);
+DECLARE_CRYPTO_API(crypto_register_lskcipher, int,
+	(struct lskcipher_alg *alg),
+	(alg));
+DECLARE_CRYPTO_API(crypto_unregister_lskcipher, void,
+	(struct lskcipher_alg *alg),
+	(alg));
+DECLARE_CRYPTO_API(crypto_register_lskciphers, int,
+	(struct lskcipher_alg *algs, int count),
+	(algs, count));
+DECLARE_CRYPTO_API(crypto_unregister_lskciphers, void,
+	(struct lskcipher_alg *algs, int count),
+	(algs, count));
+DECLARE_CRYPTO_API(lskcipher_register_instance, int,
+	(struct crypto_template *tmpl, struct lskcipher_instance *inst),
+	(tmpl, inst));
 
 int skcipher_walk_virt(struct skcipher_walk *__restrict walk,
 		       struct skcipher_request *__restrict req,
@@ -247,8 +257,10 @@ static inline struct crypto_lskcipher *lskcipher_cipher_simple(
 	return *ctx;
 }
 
-struct lskcipher_instance *lskcipher_alloc_instance_simple(
-	struct crypto_template *tmpl, struct rtattr **tb);
+DECLARE_CRYPTO_API(lskcipher_alloc_instance_simple, struct lskcipher_instance *,
+	(
+	struct crypto_template *tmpl, struct rtattr **tb),
+	(tmpl, tb));
 
 static inline struct lskcipher_alg *lskcipher_ialg_simple(
 	struct lskcipher_instance *inst)
