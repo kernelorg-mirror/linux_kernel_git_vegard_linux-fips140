@@ -609,3 +609,14 @@ DEFINE_CRYPTO_API_STUB(skcipher_alloc_instance_simple);
 
 #endif
 
+/*
+ * crypto/testmgr.c
+ */
+#if !IS_BUILTIN(CONFIG_CRYPTO_MANAGER2)
+
+#include <crypto/internal.h>
+
+DEFINE_CRYPTO_API_STUB(alg_test);
+
+#endif
+
