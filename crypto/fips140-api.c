@@ -700,3 +700,16 @@ DEFINE_CRYPTO_API_STUB(verify_signature);
 
 #endif
 
+/*
+ * crypto/asymmetric_keys/x509_cert_parser.c
+ */
+#if !IS_BUILTIN(CONFIG_X509_CERTIFICATE_PARSER)
+
+#include <crypto/asymmetric_keys/x509_parser.h>
+
+DEFINE_CRYPTO_API_STUB(x509_free_certificate);
+DEFINE_CRYPTO_API_STUB(x509_cert_parse);
+DEFINE_CRYPTO_API_STUB(x509_decode_time);
+
+#endif
+
