@@ -133,7 +133,9 @@ DECLARE_CRYPTO_API(crypto_unregister_algs, void,
 	(struct crypto_alg *algs, int count),
 	(algs, count));
 
-void crypto_mod_put(struct crypto_alg *alg);
+DECLARE_CRYPTO_API(crypto_mod_put, void,
+	(struct crypto_alg *alg),
+	(alg));
 
 DECLARE_CRYPTO_API(crypto_register_template, int,
 	(struct crypto_template *tmpl),

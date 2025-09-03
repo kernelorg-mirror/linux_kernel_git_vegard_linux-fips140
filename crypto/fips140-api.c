@@ -267,3 +267,38 @@ DEFINE_CRYPTO_API_STUB(crypto_type_has_alg);
 
 #endif
 
+/*
+ * crypto/api.c
+ */
+#if !IS_BUILTIN(CONFIG_CRYPTO)
+
+#include <linux/crypto.h>
+
+DEFINE_CRYPTO_API_STUB(crypto_req_done);
+DEFINE_CRYPTO_API_STUB(crypto_has_alg);
+DEFINE_CRYPTO_API_STUB(crypto_alloc_base);
+DEFINE_CRYPTO_API_STUB(crypto_destroy_tfm);
+DEFINE_CRYPTO_API_STUB(crypto_request_clone);
+
+#include <crypto/algapi.h>
+
+DEFINE_CRYPTO_API_STUB(crypto_mod_put);
+
+#include <crypto/internal.h>
+
+DEFINE_CRYPTO_API_STUB(crypto_mod_get);
+DEFINE_CRYPTO_API_STUB(crypto_alg_mod_lookup);
+DEFINE_CRYPTO_API_STUB(crypto_larval_alloc);
+DEFINE_CRYPTO_API_STUB(crypto_schedule_test);
+DEFINE_CRYPTO_API_STUB(crypto_shoot_alg);
+DEFINE_CRYPTO_API_STUB(__crypto_alloc_tfmgfp);
+DEFINE_CRYPTO_API_STUB(__crypto_alloc_tfm);
+DEFINE_CRYPTO_API_STUB(crypto_create_tfm_node);
+DEFINE_CRYPTO_API_STUB(crypto_clone_tfm);
+DEFINE_CRYPTO_API_STUB(crypto_find_alg);
+DEFINE_CRYPTO_API_STUB(crypto_alloc_tfm_node);
+DEFINE_CRYPTO_API_STUB(crypto_probing_notify);
+DEFINE_CRYPTO_API_STUB(crypto_destroy_alg);
+
+#endif
+
