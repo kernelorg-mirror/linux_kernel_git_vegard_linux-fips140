@@ -578,3 +578,34 @@ DEFINE_CRYPTO_API_STUB(simd_unregister_aeads);
 
 #endif
 
+/*
+ * crypto/skcipher.c
+ */
+#if !IS_BUILTIN(CONFIG_CRYPTO_SKCIPHER2)
+
+#include <crypto/skcipher.h>
+
+DEFINE_CRYPTO_API_STUB(crypto_alloc_skcipher);
+DEFINE_CRYPTO_API_STUB(crypto_alloc_sync_skcipher);
+DEFINE_CRYPTO_API_STUB(crypto_has_skcipher);
+DEFINE_CRYPTO_API_STUB(crypto_skcipher_setkey);
+DEFINE_CRYPTO_API_STUB(crypto_skcipher_encrypt);
+DEFINE_CRYPTO_API_STUB(crypto_skcipher_decrypt);
+DEFINE_CRYPTO_API_STUB(crypto_skcipher_export);
+DEFINE_CRYPTO_API_STUB(crypto_skcipher_import);
+
+#include <crypto/internal/skcipher.h>
+
+DEFINE_CRYPTO_API_STUB(crypto_grab_skcipher);
+DEFINE_CRYPTO_API_STUB(crypto_register_skcipher);
+DEFINE_CRYPTO_API_STUB(crypto_unregister_skcipher);
+DEFINE_CRYPTO_API_STUB(crypto_register_skciphers);
+DEFINE_CRYPTO_API_STUB(crypto_unregister_skciphers);
+DEFINE_CRYPTO_API_STUB(skcipher_register_instance);
+DEFINE_CRYPTO_API_STUB(skcipher_walk_virt);
+DEFINE_CRYPTO_API_STUB(skcipher_walk_aead_encrypt);
+DEFINE_CRYPTO_API_STUB(skcipher_walk_aead_decrypt);
+DEFINE_CRYPTO_API_STUB(skcipher_alloc_instance_simple);
+
+#endif
+
