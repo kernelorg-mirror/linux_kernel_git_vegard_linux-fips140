@@ -544,3 +544,21 @@ DEFINE_CRYPTO_API_STUB(crypto_shash_import_core);
 
 #endif
 
+/*
+ * crypto/sig.c
+ */
+#if !IS_BUILTIN(CONFIG_CRYPTO_SIG2)
+
+#include <crypto/sig.h>
+
+DEFINE_CRYPTO_API_STUB(crypto_alloc_sig);
+
+#include <crypto/internal/sig.h>
+
+DEFINE_CRYPTO_API_STUB(crypto_register_sig);
+DEFINE_CRYPTO_API_STUB(crypto_unregister_sig);
+DEFINE_CRYPTO_API_STUB(sig_register_instance);
+DEFINE_CRYPTO_API_STUB(crypto_grab_sig);
+
+#endif
+

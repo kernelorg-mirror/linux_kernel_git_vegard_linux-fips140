@@ -77,11 +77,11 @@ static const struct crypto_type crypto_sig_type = {
 	.algsize = offsetof(struct sig_alg, base),
 };
 
-struct crypto_sig *crypto_alloc_sig(const char *alg_name, u32 type, u32 mask)
+struct crypto_sig *CRYPTO_API(crypto_alloc_sig)(const char *alg_name, u32 type, u32 mask)
 {
 	return crypto_alloc_tfm(alg_name, &crypto_sig_type, type, mask);
 }
-EXPORT_SYMBOL_GPL(crypto_alloc_sig);
+DEFINE_CRYPTO_API(crypto_alloc_sig);
 
 static int sig_default_sign(struct crypto_sig *tfm,
 			    const void *src, unsigned int slen,
@@ -134,7 +134,7 @@ static int sig_prepare_alg(struct sig_alg *alg)
 	return 0;
 }
 
-int crypto_register_sig(struct sig_alg *alg)
+int CRYPTO_API(crypto_register_sig)(struct sig_alg *alg)
 {
 	struct crypto_alg *base = &alg->base;
 	int err;
@@ -145,15 +145,15 @@ int crypto_register_sig(struct sig_alg *alg)
 
 	return crypto_register_alg(base);
 }
-EXPORT_SYMBOL_GPL(crypto_register_sig);
+DEFINE_CRYPTO_API(crypto_register_sig);
 
-void crypto_unregister_sig(struct sig_alg *alg)
+void CRYPTO_API(crypto_unregister_sig)(struct sig_alg *alg)
 {
 	crypto_unregister_alg(&alg->base);
 }
-EXPORT_SYMBOL_GPL(crypto_unregister_sig);
+DEFINE_CRYPTO_API(crypto_unregister_sig);
 
-int sig_register_instance(struct crypto_template *tmpl,
+int CRYPTO_API(sig_register_instance)(struct crypto_template *tmpl,
 			  struct sig_instance *inst)
 {
 	int err;
@@ -167,16 +167,16 @@ int sig_register_instance(struct crypto_template *tmpl,
 
 	return crypto_register_instance(tmpl, sig_crypto_instance(inst));
 }
-EXPORT_SYMBOL_GPL(sig_register_instance);
+DEFINE_CRYPTO_API(sig_register_instance);
 
-int crypto_grab_sig(struct crypto_sig_spawn *spawn,
+int CRYPTO_API(crypto_grab_sig)(struct crypto_sig_spawn *spawn,
 		    struct crypto_instance *inst,
 		    const char *name, u32 type, u32 mask)
 {
 	spawn->base.frontend = &crypto_sig_type;
 	return crypto_grab_spawn(&spawn->base, inst, name, type, mask);
 }
-EXPORT_SYMBOL_GPL(crypto_grab_sig);
+DEFINE_CRYPTO_API(crypto_grab_sig);
 
 MODULE_LICENSE("GPL");
 MODULE_DESCRIPTION("Public Key Signature Algorithms");
