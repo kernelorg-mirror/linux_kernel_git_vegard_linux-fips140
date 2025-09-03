@@ -60,3 +60,31 @@ DEFINE_CRYPTO_API_STUB(__crypto_memneq);
 
 #endif
 
+/*
+ * lib/crypto/sha256.c
+ */
+#if !IS_BUILTIN(CONFIG_CRYPTO_LIB_SHA256)
+
+#include <crypto/sha2.h>
+
+DEFINE_CRYPTO_API_STUB(__sha256_update);
+DEFINE_CRYPTO_API_STUB(__hmac_sha256_init);
+DEFINE_CRYPTO_API_STUB(sha224_init);
+DEFINE_CRYPTO_API_STUB(sha224_final);
+DEFINE_CRYPTO_API_STUB(sha224);
+DEFINE_CRYPTO_API_STUB(hmac_sha224_preparekey);
+DEFINE_CRYPTO_API_STUB(hmac_sha224_init_usingrawkey);
+DEFINE_CRYPTO_API_STUB(hmac_sha224_final);
+DEFINE_CRYPTO_API_STUB(hmac_sha224);
+DEFINE_CRYPTO_API_STUB(hmac_sha224_usingrawkey);
+DEFINE_CRYPTO_API_STUB(sha256_init);
+DEFINE_CRYPTO_API_STUB(sha256_final);
+DEFINE_CRYPTO_API_STUB(sha256);
+DEFINE_CRYPTO_API_STUB(hmac_sha256_preparekey);
+DEFINE_CRYPTO_API_STUB(hmac_sha256_init_usingrawkey);
+DEFINE_CRYPTO_API_STUB(hmac_sha256_final);
+DEFINE_CRYPTO_API_STUB(hmac_sha256);
+DEFINE_CRYPTO_API_STUB(hmac_sha256_usingrawkey);
+
+#endif
+

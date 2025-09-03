@@ -6,6 +6,7 @@
 #ifndef _CRYPTO_SHA2_H
 #define _CRYPTO_SHA2_H
 
+#include <crypto/api.h>
 #include <linux/types.h>
 
 #define SHA224_DIGEST_SIZE	28
@@ -129,7 +130,9 @@ struct __sha256_ctx {
 	u64 bytecount;
 	u8 buf[SHA256_BLOCK_SIZE] __aligned(__alignof__(__be64));
 };
-void __sha256_update(struct __sha256_ctx *ctx, const u8 *data, size_t len);
+DECLARE_CRYPTO_API(__sha256_update, void,
+	(struct __sha256_ctx *ctx, const u8 *data, size_t len),
+	(ctx, data, len));
 
 /*
  * HMAC key and message context structs, shared by HMAC-SHA224 and HMAC-SHA256.
@@ -144,8 +147,9 @@ struct __hmac_sha256_ctx {
 	struct __sha256_ctx sha_ctx;
 	struct sha256_block_state ostate;
 };
-void __hmac_sha256_init(struct __hmac_sha256_ctx *ctx,
-			const struct __hmac_sha256_key *key);
+DECLARE_CRYPTO_API(__hmac_sha256_init, void,
+	(struct __hmac_sha256_ctx *ctx, const struct __hmac_sha256_key *key),
+	(ctx, key));
 
 /**
  * struct sha224_ctx - Context for hashing a message with SHA-224
@@ -163,7 +167,9 @@ struct sha224_ctx {
  *
  * Context: Any context.
  */
-void sha224_init(struct sha224_ctx *ctx);
+DECLARE_CRYPTO_API(sha224_init, void,
+	(struct sha224_ctx *ctx),
+	(ctx));
 
 /**
  * sha224_update() - Update a SHA-224 context with message data
@@ -190,7 +196,9 @@ static inline void sha224_update(struct sha224_ctx *ctx,
  *
  * Context: Any context.
  */
-void sha224_final(struct sha224_ctx *ctx, u8 out[SHA224_DIGEST_SIZE]);
+DECLARE_CRYPTO_API(sha224_final, void,
+	(struct sha224_ctx *ctx, u8 out[SHA224_DIGEST_SIZE]),
+	(ctx, out));
 
 /**
  * sha224() - Compute SHA-224 message digest in one shot
@@ -200,7 +208,9 @@ void sha224_final(struct sha224_ctx *ctx, u8 out[SHA224_DIGEST_SIZE]);
  *
  * Context: Any context.
  */
-void sha224(const u8 *data, size_t len, u8 out[SHA224_DIGEST_SIZE]);
+DECLARE_CRYPTO_API(sha224, void,
+	(const u8 *data, size_t len, u8 out[SHA224_DIGEST_SIZE]),
+	(data, len, out));
 
 /**
  * struct hmac_sha224_key - Prepared key for HMAC-SHA224
@@ -229,8 +239,9 @@ struct hmac_sha224_ctx {
  *
  * Context: Any context.
  */
-void hmac_sha224_preparekey(struct hmac_sha224_key *key,
-			    const u8 *raw_key, size_t raw_key_len);
+DECLARE_CRYPTO_API(hmac_sha224_preparekey, void,
+	(struct hmac_sha224_key *key, const u8 *raw_key, size_t raw_key_len),
+	(key, raw_key, raw_key_len));
 
 /**
  * hmac_sha224_init() - Initialize an HMAC-SHA224 context for a new message
@@ -259,8 +270,9 @@ static inline void hmac_sha224_init(struct hmac_sha224_ctx *ctx,
  *
  * Context: Any context.
  */
-void hmac_sha224_init_usingrawkey(struct hmac_sha224_ctx *ctx,
-				  const u8 *raw_key, size_t raw_key_len);
+DECLARE_CRYPTO_API(hmac_sha224_init_usingrawkey, void,
+	(struct hmac_sha224_ctx *ctx, const u8 *raw_key, size_t raw_key_len),
+	(ctx, raw_key, raw_key_len));
 
 /**
  * hmac_sha224_update() - Update an HMAC-SHA224 context with message data
@@ -287,7 +299,9 @@ static inline void hmac_sha224_update(struct hmac_sha224_ctx *ctx,
  *
  * Context: Any context.
  */
-void hmac_sha224_final(struct hmac_sha224_ctx *ctx, u8 out[SHA224_DIGEST_SIZE]);
+DECLARE_CRYPTO_API(hmac_sha224_final, void,
+	(struct hmac_sha224_ctx *ctx, u8 out[SHA224_DIGEST_SIZE]),
+	(ctx, out));
 
 /**
  * hmac_sha224() - Compute HMAC-SHA224 in one shot, using a prepared key
@@ -300,8 +314,9 @@ void hmac_sha224_final(struct hmac_sha224_ctx *ctx, u8 out[SHA224_DIGEST_SIZE]);
  *
  * Context: Any context.
  */
-void hmac_sha224(const struct hmac_sha224_key *key,
-		 const u8 *data, size_t data_len, u8 out[SHA224_DIGEST_SIZE]);
+DECLARE_CRYPTO_API(hmac_sha224, void,
+	(const struct hmac_sha224_key *key, const u8 *data, size_t data_len, u8 out[SHA224_DIGEST_SIZE]),
+	(key, data, data_len, out));
 
 /**
  * hmac_sha224_usingrawkey() - Compute HMAC-SHA224 in one shot, using a raw key
@@ -316,9 +331,9 @@ void hmac_sha224(const struct hmac_sha224_key *key,
  *
  * Context: Any context.
  */
-void hmac_sha224_usingrawkey(const u8 *raw_key, size_t raw_key_len,
-			     const u8 *data, size_t data_len,
-			     u8 out[SHA224_DIGEST_SIZE]);
+DECLARE_CRYPTO_API(hmac_sha224_usingrawkey, void,
+	(const u8 *raw_key, size_t raw_key_len, const u8 *data, size_t data_len, u8 out[SHA224_DIGEST_SIZE]),
+	(raw_key, raw_key_len, data, data_len, out));
 
 /**
  * struct sha256_ctx - Context for hashing a message with SHA-256
@@ -336,7 +351,9 @@ struct sha256_ctx {
  *
  * Context: Any context.
  */
-void sha256_init(struct sha256_ctx *ctx);
+DECLARE_CRYPTO_API(sha256_init, void,
+	(struct sha256_ctx *ctx),
+	(ctx));
 
 /**
  * sha256_update() - Update a SHA-256 context with message data
@@ -363,7 +380,9 @@ static inline void sha256_update(struct sha256_ctx *ctx,
  *
  * Context: Any context.
  */
-void sha256_final(struct sha256_ctx *ctx, u8 out[SHA256_DIGEST_SIZE]);
+DECLARE_CRYPTO_API(sha256_final, void,
+	(struct sha256_ctx *ctx, u8 out[SHA256_DIGEST_SIZE]),
+	(ctx, out));
 
 /**
  * sha256() - Compute SHA-256 message digest in one shot
@@ -373,7 +392,9 @@ void sha256_final(struct sha256_ctx *ctx, u8 out[SHA256_DIGEST_SIZE]);
  *
  * Context: Any context.
  */
-void sha256(const u8 *data, size_t len, u8 out[SHA256_DIGEST_SIZE]);
+DECLARE_CRYPTO_API(sha256, void,
+	(const u8 *data, size_t len, u8 out[SHA256_DIGEST_SIZE]),
+	(data, len, out));
 
 /**
  * struct hmac_sha256_key - Prepared key for HMAC-SHA256
@@ -402,8 +423,9 @@ struct hmac_sha256_ctx {
  *
  * Context: Any context.
  */
-void hmac_sha256_preparekey(struct hmac_sha256_key *key,
-			    const u8 *raw_key, size_t raw_key_len);
+DECLARE_CRYPTO_API(hmac_sha256_preparekey, void,
+	(struct hmac_sha256_key *key, const u8 *raw_key, size_t raw_key_len),
+	(key, raw_key, raw_key_len));
 
 /**
  * hmac_sha256_init() - Initialize an HMAC-SHA256 context for a new message
@@ -432,8 +454,9 @@ static inline void hmac_sha256_init(struct hmac_sha256_ctx *ctx,
  *
  * Context: Any context.
  */
-void hmac_sha256_init_usingrawkey(struct hmac_sha256_ctx *ctx,
-				  const u8 *raw_key, size_t raw_key_len);
+DECLARE_CRYPTO_API(hmac_sha256_init_usingrawkey, void,
+	(struct hmac_sha256_ctx *ctx, const u8 *raw_key, size_t raw_key_len),
+	(ctx, raw_key, raw_key_len));
 
 /**
  * hmac_sha256_update() - Update an HMAC-SHA256 context with message data
@@ -460,7 +483,9 @@ static inline void hmac_sha256_update(struct hmac_sha256_ctx *ctx,
  *
  * Context: Any context.
  */
-void hmac_sha256_final(struct hmac_sha256_ctx *ctx, u8 out[SHA256_DIGEST_SIZE]);
+DECLARE_CRYPTO_API(hmac_sha256_final, void,
+	(struct hmac_sha256_ctx *ctx, u8 out[SHA256_DIGEST_SIZE]),
+	(ctx, out));
 
 /**
  * hmac_sha256() - Compute HMAC-SHA256 in one shot, using a prepared key
@@ -473,8 +498,9 @@ void hmac_sha256_final(struct hmac_sha256_ctx *ctx, u8 out[SHA256_DIGEST_SIZE]);
  *
  * Context: Any context.
  */
-void hmac_sha256(const struct hmac_sha256_key *key,
-		 const u8 *data, size_t data_len, u8 out[SHA256_DIGEST_SIZE]);
+DECLARE_CRYPTO_API(hmac_sha256, void,
+	(const struct hmac_sha256_key *key, const u8 *data, size_t data_len, u8 out[SHA256_DIGEST_SIZE]),
+	(key, data, data_len, out));
 
 /**
  * hmac_sha256_usingrawkey() - Compute HMAC-SHA256 in one shot, using a raw key
@@ -489,9 +515,9 @@ void hmac_sha256(const struct hmac_sha256_key *key,
  *
  * Context: Any context.
  */
-void hmac_sha256_usingrawkey(const u8 *raw_key, size_t raw_key_len,
-			     const u8 *data, size_t data_len,
-			     u8 out[SHA256_DIGEST_SIZE]);
+DECLARE_CRYPTO_API(hmac_sha256_usingrawkey, void,
+	(const u8 *raw_key, size_t raw_key_len, const u8 *data, size_t data_len, u8 out[SHA256_DIGEST_SIZE]),
+	(raw_key, raw_key_len, data, data_len, out));
 
 /* State for the SHA-512 (and SHA-384) compression function */
 struct sha512_block_state {
