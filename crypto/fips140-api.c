@@ -488,3 +488,15 @@ DEFINE_CRYPTO_API_STUB(crypto_del_default_rng);
 
 #endif
 
+/*
+ * crypto/rsa_helper.c
+ */
+#if !IS_BUILTIN(CONFIG_CRYPTO_RSA)
+
+#include <crypto/internal/rsa.h>
+
+DEFINE_CRYPTO_API_STUB(rsa_parse_pub_key);
+DEFINE_CRYPTO_API_STUB(rsa_parse_priv_key);
+
+#endif
+
