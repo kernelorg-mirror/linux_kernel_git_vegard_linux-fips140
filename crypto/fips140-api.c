@@ -397,3 +397,16 @@ DEFINE_CRYPTO_API_STUB(ecc_point_mult_shamir);
 
 #endif
 
+/*
+ * crypto/ecdh_helper.c
+ */
+#if !IS_BUILTIN(CONFIG_CRYPTO_ECDH)
+
+#include <crypto/ecdh.h>
+
+DEFINE_CRYPTO_API_STUB(crypto_ecdh_key_len);
+DEFINE_CRYPTO_API_STUB(crypto_ecdh_encode_key);
+DEFINE_CRYPTO_API_STUB(crypto_ecdh_decode_key);
+
+#endif
+
