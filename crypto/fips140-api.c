@@ -302,3 +302,14 @@ DEFINE_CRYPTO_API_STUB(crypto_destroy_alg);
 
 #endif
 
+/*
+ * crypto/authenc.c
+ */
+#if !IS_BUILTIN(CONFIG_CRYPTO_AUTHENC)
+
+#include <crypto/authenc.h>
+
+DEFINE_CRYPTO_API_STUB(crypto_authenc_extractkeys);
+
+#endif
+

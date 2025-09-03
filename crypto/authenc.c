@@ -41,7 +41,7 @@ static void authenc_request_complete(struct aead_request *req, int err)
 		aead_request_complete(req, err);
 }
 
-int crypto_authenc_extractkeys(struct crypto_authenc_keys *keys, const u8 *key,
+int CRYPTO_API(crypto_authenc_extractkeys)(struct crypto_authenc_keys *keys, const u8 *key,
 			       unsigned int keylen)
 {
 	struct rtattr *rta = (struct rtattr *)key;
@@ -77,7 +77,7 @@ int crypto_authenc_extractkeys(struct crypto_authenc_keys *keys, const u8 *key,
 
 	return 0;
 }
-EXPORT_SYMBOL_GPL(crypto_authenc_extractkeys);
+DEFINE_CRYPTO_API(crypto_authenc_extractkeys);
 
 static int crypto_authenc_setkey(struct crypto_aead *authenc, const u8 *key,
 				 unsigned int keylen)
@@ -421,8 +421,8 @@ static void __exit crypto_authenc_module_exit(void)
 	crypto_unregister_template(&crypto_authenc_tmpl);
 }
 
-module_init(crypto_authenc_module_init);
-module_exit(crypto_authenc_module_exit);
+crypto_module_init(crypto_authenc_module_init);
+crypto_module_exit(crypto_authenc_module_exit);
 
 MODULE_LICENSE("GPL");
 MODULE_DESCRIPTION("Simple AEAD wrapper for IPsec");
