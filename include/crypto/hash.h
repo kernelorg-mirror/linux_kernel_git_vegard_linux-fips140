@@ -765,12 +765,17 @@ static inline void ahash_request_set_virt(struct ahash_request *req,
  * Return: allocated cipher handle in case of success; IS_ERR() is true in case
  *	   of an error, PTR_ERR() returns the error code.
  */
-struct crypto_shash *crypto_alloc_shash(const char *alg_name, u32 type,
-					u32 mask);
+DECLARE_CRYPTO_API(crypto_alloc_shash, struct crypto_shash *,
+	(const char *alg_name, u32 type, u32 mask),
+	(alg_name, type, mask));
 
-struct crypto_shash *crypto_clone_shash(struct crypto_shash *tfm);
+DECLARE_CRYPTO_API(crypto_clone_shash, struct crypto_shash *,
+	(struct crypto_shash *tfm),
+	(tfm));
 
-int crypto_has_shash(const char *alg_name, u32 type, u32 mask);
+DECLARE_CRYPTO_API(crypto_has_shash, int,
+	(const char *alg_name, u32 type, u32 mask),
+	(alg_name, type, mask));
 
 static inline struct crypto_tfm *crypto_shash_tfm(struct crypto_shash *tfm)
 {
@@ -894,8 +899,9 @@ static inline void *shash_desc_ctx(struct shash_desc *desc)
  * Context: Softirq or process context.
  * Return: 0 if the setting of the key was successful; < 0 if an error occurred
  */
-int crypto_shash_setkey(struct crypto_shash *tfm, const u8 *key,
-			unsigned int keylen);
+DECLARE_CRYPTO_API(crypto_shash_setkey, int,
+	(struct crypto_shash *tfm, const u8 *key, unsigned int keylen),
+	(tfm, key, keylen));
 
 /**
  * crypto_shash_digest() - calculate message digest for buffer
@@ -912,8 +918,9 @@ int crypto_shash_setkey(struct crypto_shash *tfm, const u8 *key,
  * Return: 0 if the message digest creation was successful; < 0 if an error
  *	   occurred
  */
-int crypto_shash_digest(struct shash_desc *desc, const u8 *data,
-			unsigned int len, u8 *out);
+DECLARE_CRYPTO_API(crypto_shash_digest, int,
+	(struct shash_desc *desc, const u8 *data, unsigned int len, u8 *out),
+	(desc, data, len, out));
 
 /**
  * crypto_shash_tfm_digest() - calculate message digest for buffer
@@ -931,8 +938,9 @@ int crypto_shash_digest(struct shash_desc *desc, const u8 *data,
  * Context: Softirq or process context.
  * Return: 0 on success; < 0 if an error occurred.
  */
-int crypto_shash_tfm_digest(struct crypto_shash *tfm, const u8 *data,
-			    unsigned int len, u8 *out);
+DECLARE_CRYPTO_API(crypto_shash_tfm_digest, int,
+	(struct crypto_shash *tfm, const u8 *data, unsigned int len, u8 *out),
+	(tfm, data, len, out));
 
 DECLARE_CRYPTO_API(crypto_hash_digest, int,
 	(struct crypto_ahash *tfm, const u8 *data, unsigned int len, u8 *out),
@@ -950,7 +958,9 @@ DECLARE_CRYPTO_API(crypto_hash_digest, int,
  * Context: Softirq or process context.
  * Return: 0 if the export creation was successful; < 0 if an error occurred
  */
-int crypto_shash_export(struct shash_desc *desc, void *out);
+DECLARE_CRYPTO_API(crypto_shash_export, int,
+	(struct shash_desc *desc, void *out),
+	(desc, out));
 
 /**
  * crypto_shash_import() - import operational state
@@ -964,7 +974,9 @@ int crypto_shash_export(struct shash_desc *desc, void *out);
  * Context: Softirq or process context.
  * Return: 0 if the import was successful; < 0 if an error occurred
  */
-int crypto_shash_import(struct shash_desc *desc, const void *in);
+DECLARE_CRYPTO_API(crypto_shash_import, int,
+	(struct shash_desc *desc, const void *in),
+	(desc, in));
 
 /**
  * crypto_shash_init() - (re)initialize message digest
@@ -978,7 +990,9 @@ int crypto_shash_import(struct shash_desc *desc, const void *in);
  * Return: 0 if the message digest initialization was successful; < 0 if an
  *	   error occurred
  */
-int crypto_shash_init(struct shash_desc *desc);
+DECLARE_CRYPTO_API(crypto_shash_init, int,
+	(struct shash_desc *desc),
+	(desc));
 
 /**
  * crypto_shash_finup() - calculate message digest of buffer
@@ -995,8 +1009,9 @@ int crypto_shash_init(struct shash_desc *desc);
  * Return: 0 if the message digest creation was successful; < 0 if an error
  *	   occurred
  */
-int crypto_shash_finup(struct shash_desc *desc, const u8 *data,
-		       unsigned int len, u8 *out);
+DECLARE_CRYPTO_API(crypto_shash_finup, int,
+	(struct shash_desc *desc, const u8 *data, unsigned int len, u8 *out),
+	(desc, data, len, out));
 
 /**
  * crypto_shash_update() - add data to message digest for processing

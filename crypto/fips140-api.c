@@ -511,3 +511,36 @@ DEFINE_CRYPTO_API_STUB(crypto_sha3_init);
 
 #endif
 
+/*
+ * crypto/shash.c
+ */
+#if !IS_BUILTIN(CONFIG_CRYPTO_HASH2)
+
+#include <crypto/hash.h>
+
+DEFINE_CRYPTO_API_STUB(crypto_alloc_shash);
+DEFINE_CRYPTO_API_STUB(crypto_clone_shash);
+DEFINE_CRYPTO_API_STUB(crypto_has_shash);
+DEFINE_CRYPTO_API_STUB(crypto_shash_setkey);
+DEFINE_CRYPTO_API_STUB(crypto_shash_digest);
+DEFINE_CRYPTO_API_STUB(crypto_shash_tfm_digest);
+DEFINE_CRYPTO_API_STUB(crypto_shash_export);
+DEFINE_CRYPTO_API_STUB(crypto_shash_import);
+DEFINE_CRYPTO_API_STUB(crypto_shash_init);
+DEFINE_CRYPTO_API_STUB(crypto_shash_finup);
+
+#include <crypto/internal/hash.h>
+
+DEFINE_CRYPTO_API_STUB(crypto_shash_alg_has_setkey);
+DEFINE_CRYPTO_API_STUB(crypto_register_shash);
+DEFINE_CRYPTO_API_STUB(crypto_unregister_shash);
+DEFINE_CRYPTO_API_STUB(crypto_register_shashes);
+DEFINE_CRYPTO_API_STUB(crypto_unregister_shashes);
+DEFINE_CRYPTO_API_STUB(shash_register_instance);
+DEFINE_CRYPTO_API_STUB(shash_free_singlespawn_instance);
+DEFINE_CRYPTO_API_STUB(crypto_grab_shash);
+DEFINE_CRYPTO_API_STUB(crypto_shash_export_core);
+DEFINE_CRYPTO_API_STUB(crypto_shash_import_core);
+
+#endif
+

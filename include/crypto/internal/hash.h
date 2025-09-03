@@ -107,7 +107,9 @@ DECLARE_CRYPTO_API(ahash_free_singlespawn_instance, void,
 	(struct ahash_instance *inst),
 	(inst));
 
-bool crypto_shash_alg_has_setkey(struct shash_alg *alg);
+DECLARE_CRYPTO_API(crypto_shash_alg_has_setkey, bool,
+	(struct shash_alg *alg),
+	(alg));
 
 DECLARE_CRYPTO_API(crypto_hash_alg_has_setkey, bool,
 	(struct hash_alg_common *halg),
@@ -146,17 +148,28 @@ static inline struct hash_alg_common *crypto_spawn_ahash_alg(
 	return __crypto_hash_alg_common(spawn->base.alg);
 }
 
-int crypto_register_shash(struct shash_alg *alg);
-void crypto_unregister_shash(struct shash_alg *alg);
-int crypto_register_shashes(struct shash_alg *algs, int count);
-void crypto_unregister_shashes(struct shash_alg *algs, int count);
-int shash_register_instance(struct crypto_template *tmpl,
-			    struct shash_instance *inst);
-void shash_free_singlespawn_instance(struct shash_instance *inst);
+DECLARE_CRYPTO_API(crypto_register_shash, int,
+	(struct shash_alg *alg),
+	(alg));
+DECLARE_CRYPTO_API(crypto_unregister_shash, void,
+	(struct shash_alg *alg),
+	(alg));
+DECLARE_CRYPTO_API(crypto_register_shashes, int,
+	(struct shash_alg *algs, int count),
+	(algs, count));
+DECLARE_CRYPTO_API(crypto_unregister_shashes, void,
+	(struct shash_alg *algs, int count),
+	(algs, count));
+DECLARE_CRYPTO_API(shash_register_instance, int,
+	(struct crypto_template *tmpl, struct shash_instance *inst),
+	(tmpl, inst));
+DECLARE_CRYPTO_API(shash_free_singlespawn_instance, void,
+	(struct shash_instance *inst),
+	(inst));
 
-int crypto_grab_shash(struct crypto_shash_spawn *spawn,
-		      struct crypto_instance *inst,
-		      const char *name, u32 type, u32 mask);
+DECLARE_CRYPTO_API(crypto_grab_shash, int,
+	(struct crypto_shash_spawn *spawn, struct crypto_instance *inst, const char *name, u32 type, u32 mask),
+	(spawn, inst, name, type, mask));
 
 static inline void crypto_drop_shash(struct crypto_shash_spawn *spawn)
 {
@@ -408,7 +421,9 @@ DECLARE_CRYPTO_API(crypto_ahash_import_core, int,
  * Context: Softirq or process context.
  * Return: 0 if the export creation was successful; < 0 if an error occurred
  */
-int crypto_shash_export_core(struct shash_desc *desc, void *out);
+DECLARE_CRYPTO_API(crypto_shash_export_core, int,
+	(struct shash_desc *desc, void *out),
+	(desc, out));
 
 /**
  * crypto_shash_import_core() - import core state
@@ -420,7 +435,9 @@ int crypto_shash_export_core(struct shash_desc *desc, void *out);
  * Context: Softirq or process context.
  * Return: 0 if the import was successful; < 0 if an error occurred
  */
-int crypto_shash_import_core(struct shash_desc *desc, const void *in);
+DECLARE_CRYPTO_API(crypto_shash_import_core, int,
+	(struct shash_desc *desc, const void *in),
+	(desc, in));
 
 #endif	/* _CRYPTO_INTERNAL_HASH_H */
 
