@@ -99,7 +99,7 @@ static int hash_walk_new_entry(struct crypto_hash_walk *walk)
 	return hash_walk_next(walk);
 }
 
-int crypto_hash_walk_first(struct ahash_request *req,
+int CRYPTO_API(crypto_hash_walk_first)(struct ahash_request *req,
 			   struct crypto_hash_walk *walk)
 {
 	walk->total = req->nbytes;
@@ -120,9 +120,9 @@ int crypto_hash_walk_first(struct ahash_request *req,
 
 	return hash_walk_new_entry(walk);
 }
-EXPORT_SYMBOL_GPL(crypto_hash_walk_first);
+DEFINE_CRYPTO_API(crypto_hash_walk_first);
 
-int crypto_hash_walk_done(struct crypto_hash_walk *walk, int err)
+int CRYPTO_API(crypto_hash_walk_done)(struct crypto_hash_walk *walk, int err)
 {
 	if ((walk->flags & CRYPTO_AHASH_REQ_VIRT))
 		return err;
@@ -148,7 +148,7 @@ int crypto_hash_walk_done(struct crypto_hash_walk *walk, int err)
 
 	return hash_walk_new_entry(walk);
 }
-EXPORT_SYMBOL_GPL(crypto_hash_walk_done);
+DEFINE_CRYPTO_API(crypto_hash_walk_done);
 
 /*
  * For an ahash tfm that is using an shash algorithm (instead of an ahash
@@ -168,7 +168,7 @@ static inline struct shash_desc *prepare_shash_desc(struct ahash_request *req,
 	return desc;
 }
 
-int shash_ahash_update(struct ahash_request *req, struct shash_desc *desc)
+int CRYPTO_API(shash_ahash_update)(struct ahash_request *req, struct shash_desc *desc)
 {
 	struct crypto_hash_walk walk;
 	int nbytes;
@@ -179,9 +179,9 @@ int shash_ahash_update(struct ahash_request *req, struct shash_desc *desc)
 
 	return nbytes;
 }
-EXPORT_SYMBOL_GPL(shash_ahash_update);
+DEFINE_CRYPTO_API(shash_ahash_update);
 
-int shash_ahash_finup(struct ahash_request *req, struct shash_desc *desc)
+int CRYPTO_API(shash_ahash_finup)(struct ahash_request *req, struct shash_desc *desc)
 {
 	struct crypto_hash_walk walk;
 	int nbytes;
@@ -200,9 +200,9 @@ int shash_ahash_finup(struct ahash_request *req, struct shash_desc *desc)
 
 	return nbytes;
 }
-EXPORT_SYMBOL_GPL(shash_ahash_finup);
+DEFINE_CRYPTO_API(shash_ahash_finup);
 
-int shash_ahash_digest(struct ahash_request *req, struct shash_desc *desc)
+int CRYPTO_API(shash_ahash_digest)(struct ahash_request *req, struct shash_desc *desc)
 {
 	unsigned int nbytes = req->nbytes;
 	struct scatterlist *sg;
@@ -239,7 +239,7 @@ int shash_ahash_digest(struct ahash_request *req, struct shash_desc *desc)
 	kunmap_local(data);
 	return err;
 }
-EXPORT_SYMBOL_GPL(shash_ahash_digest);
+DEFINE_CRYPTO_API(shash_ahash_digest);
 
 static void crypto_exit_ahash_using_shash(struct crypto_tfm *tfm)
 {
@@ -287,7 +287,7 @@ static void ahash_set_needkey(struct crypto_ahash *tfm, struct ahash_alg *alg)
 		crypto_ahash_set_flags(tfm, CRYPTO_TFM_NEED_KEY);
 }
 
-int crypto_ahash_setkey(struct crypto_ahash *tfm, const u8 *key,
+int CRYPTO_API(crypto_ahash_setkey)(struct crypto_ahash *tfm, const u8 *key,
 			unsigned int keylen)
 {
 	if (likely(tfm->using_shash)) {
@@ -317,7 +317,7 @@ int crypto_ahash_setkey(struct crypto_ahash *tfm, const u8 *key,
 	crypto_ahash_clear_flags(tfm, CRYPTO_TFM_NEED_KEY);
 	return 0;
 }
-EXPORT_SYMBOL_GPL(crypto_ahash_setkey);
+DEFINE_CRYPTO_API(crypto_ahash_setkey);
 
 static int ahash_do_req_chain(struct ahash_request *req,
 			      int (*const *op)(struct ahash_request *req))
@@ -368,7 +368,7 @@ out_no_state:
 	}
 }
 
-int crypto_ahash_init(struct ahash_request *req)
+int CRYPTO_API(crypto_ahash_init)(struct ahash_request *req)
 {
 	struct crypto_ahash *tfm = crypto_ahash_reqtfm(req);
 
@@ -386,7 +386,7 @@ int crypto_ahash_init(struct ahash_request *req)
 	}
 	return crypto_ahash_alg(tfm)->init(req);
 }
-EXPORT_SYMBOL_GPL(crypto_ahash_init);
+DEFINE_CRYPTO_API(crypto_ahash_init);
 
 static void ahash_save_req(struct ahash_request *req, crypto_completion_t cplt)
 {
@@ -440,7 +440,7 @@ static void ahash_update_done(void *data, int err)
 	ahash_op_done(data, err, ahash_update_finish);
 }
 
-int crypto_ahash_update(struct ahash_request *req)
+int CRYPTO_API(crypto_ahash_update)(struct ahash_request *req)
 {
 	struct crypto_ahash *tfm = crypto_ahash_reqtfm(req);
 	bool nonzero = crypto_ahash_final_nonzero(tfm);
@@ -489,7 +489,7 @@ int crypto_ahash_update(struct ahash_request *req)
 
 	return ahash_update_finish(req, err);
 }
-EXPORT_SYMBOL_GPL(crypto_ahash_update);
+DEFINE_CRYPTO_API(crypto_ahash_update);
 
 static int ahash_finup_finish(struct ahash_request *req, int err)
 {
@@ -521,7 +521,7 @@ static void ahash_finup_done(void *data, int err)
 	ahash_op_done(data, err, ahash_finup_finish);
 }
 
-int crypto_ahash_finup(struct ahash_request *req)
+int CRYPTO_API(crypto_ahash_finup)(struct ahash_request *req)
 {
 	struct crypto_ahash *tfm = crypto_ahash_reqtfm(req);
 	int bs = crypto_ahash_blocksize(tfm);
@@ -561,9 +561,9 @@ int crypto_ahash_finup(struct ahash_request *req)
 
 	return ahash_finup_finish(req, err);
 }
-EXPORT_SYMBOL_GPL(crypto_ahash_finup);
+DEFINE_CRYPTO_API(crypto_ahash_finup);
 
-int crypto_ahash_digest(struct ahash_request *req)
+int CRYPTO_API(crypto_ahash_digest)(struct ahash_request *req)
 {
 	struct crypto_ahash *tfm = crypto_ahash_reqtfm(req);
 
@@ -575,7 +575,7 @@ int crypto_ahash_digest(struct ahash_request *req)
 		return -ENOKEY;
 	return ahash_do_req_chain(req, &crypto_ahash_alg(tfm)->digest);
 }
-EXPORT_SYMBOL_GPL(crypto_ahash_digest);
+DEFINE_CRYPTO_API(crypto_ahash_digest);
 
 static void ahash_def_finup_done2(void *data, int err)
 {
@@ -624,7 +624,7 @@ static int ahash_def_finup(struct ahash_request *req)
 	return ahash_def_finup_finish1(req, err);
 }
 
-int crypto_ahash_export_core(struct ahash_request *req, void *out)
+int CRYPTO_API(crypto_ahash_export_core)(struct ahash_request *req, void *out)
 {
 	struct crypto_ahash *tfm = crypto_ahash_reqtfm(req);
 
@@ -632,9 +632,9 @@ int crypto_ahash_export_core(struct ahash_request *req, void *out)
 		return crypto_shash_export_core(ahash_request_ctx(req), out);
 	return crypto_ahash_alg(tfm)->export_core(req, out);
 }
-EXPORT_SYMBOL_GPL(crypto_ahash_export_core);
+DEFINE_CRYPTO_API(crypto_ahash_export_core);
 
-int crypto_ahash_export(struct ahash_request *req, void *out)
+int CRYPTO_API(crypto_ahash_export)(struct ahash_request *req, void *out)
 {
 	struct crypto_ahash *tfm = crypto_ahash_reqtfm(req);
 
@@ -650,9 +650,9 @@ int crypto_ahash_export(struct ahash_request *req, void *out)
 	}
 	return crypto_ahash_alg(tfm)->export(req, out);
 }
-EXPORT_SYMBOL_GPL(crypto_ahash_export);
+DEFINE_CRYPTO_API(crypto_ahash_export);
 
-int crypto_ahash_import_core(struct ahash_request *req, const void *in)
+int CRYPTO_API(crypto_ahash_import_core)(struct ahash_request *req, const void *in)
 {
 	struct crypto_ahash *tfm = crypto_ahash_reqtfm(req);
 
@@ -663,9 +663,9 @@ int crypto_ahash_import_core(struct ahash_request *req, const void *in)
 		return -ENOKEY;
 	return crypto_ahash_alg(tfm)->import_core(req, in);
 }
-EXPORT_SYMBOL_GPL(crypto_ahash_import_core);
+DEFINE_CRYPTO_API(crypto_ahash_import_core);
 
-int crypto_ahash_import(struct ahash_request *req, const void *in)
+int CRYPTO_API(crypto_ahash_import)(struct ahash_request *req, const void *in)
 {
 	struct crypto_ahash *tfm = crypto_ahash_reqtfm(req);
 
@@ -681,7 +681,7 @@ int crypto_ahash_import(struct ahash_request *req, const void *in)
 	}
 	return crypto_ahash_alg(tfm)->import(req, in);
 }
-EXPORT_SYMBOL_GPL(crypto_ahash_import);
+DEFINE_CRYPTO_API(crypto_ahash_import);
 
 static void crypto_ahash_exit_tfm(struct crypto_tfm *tfm)
 {
@@ -816,29 +816,29 @@ static const struct crypto_type crypto_ahash_type = {
 	.algsize = offsetof(struct ahash_alg, halg.base),
 };
 
-int crypto_grab_ahash(struct crypto_ahash_spawn *spawn,
+int CRYPTO_API(crypto_grab_ahash)(struct crypto_ahash_spawn *spawn,
 		      struct crypto_instance *inst,
 		      const char *name, u32 type, u32 mask)
 {
 	spawn->base.frontend = &crypto_ahash_type;
 	return crypto_grab_spawn(&spawn->base, inst, name, type, mask);
 }
-EXPORT_SYMBOL_GPL(crypto_grab_ahash);
+DEFINE_CRYPTO_API(crypto_grab_ahash);
 
-struct crypto_ahash *crypto_alloc_ahash(const char *alg_name, u32 type,
+struct crypto_ahash *CRYPTO_API(crypto_alloc_ahash)(const char *alg_name, u32 type,
 					u32 mask)
 {
 	return crypto_alloc_tfm(alg_name, &crypto_ahash_type, type, mask);
 }
-EXPORT_SYMBOL_GPL(crypto_alloc_ahash);
+DEFINE_CRYPTO_API(crypto_alloc_ahash);
 
-int crypto_has_ahash(const char *alg_name, u32 type, u32 mask)
+int CRYPTO_API(crypto_has_ahash)(const char *alg_name, u32 type, u32 mask)
 {
 	return crypto_type_has_alg(alg_name, &crypto_ahash_type, type, mask);
 }
-EXPORT_SYMBOL_GPL(crypto_has_ahash);
+DEFINE_CRYPTO_API(crypto_has_ahash);
 
-bool crypto_hash_alg_has_setkey(struct hash_alg_common *halg)
+bool CRYPTO_API(crypto_hash_alg_has_setkey)(struct hash_alg_common *halg)
 {
 	struct crypto_alg *alg = &halg->base;
 
@@ -847,9 +847,9 @@ bool crypto_hash_alg_has_setkey(struct hash_alg_common *halg)
 
 	return __crypto_ahash_alg(alg)->setkey != ahash_nosetkey;
 }
-EXPORT_SYMBOL_GPL(crypto_hash_alg_has_setkey);
+DEFINE_CRYPTO_API(crypto_hash_alg_has_setkey);
 
-struct crypto_ahash *crypto_clone_ahash(struct crypto_ahash *hash)
+struct crypto_ahash *CRYPTO_API(crypto_clone_ahash)(struct crypto_ahash *hash)
 {
 	struct hash_alg_common *halg = crypto_hash_alg_common(hash);
 	struct crypto_tfm *tfm = crypto_ahash_tfm(hash);
@@ -917,7 +917,7 @@ out_free_nhash:
 	crypto_free_ahash(nhash);
 	return ERR_PTR(err);
 }
-EXPORT_SYMBOL_GPL(crypto_clone_ahash);
+DEFINE_CRYPTO_API(crypto_clone_ahash);
 
 static int ahash_default_export_core(struct ahash_request *req, void *out)
 {
@@ -981,7 +981,7 @@ static int ahash_prepare_alg(struct ahash_alg *alg)
 	return 0;
 }
 
-int crypto_register_ahash(struct ahash_alg *alg)
+int CRYPTO_API(crypto_register_ahash)(struct ahash_alg *alg)
 {
 	struct crypto_alg *base = &alg->halg.base;
 	int err;
@@ -992,15 +992,15 @@ int crypto_register_ahash(struct ahash_alg *alg)
 
 	return crypto_register_alg(base);
 }
-EXPORT_SYMBOL_GPL(crypto_register_ahash);
+DEFINE_CRYPTO_API(crypto_register_ahash);
 
-void crypto_unregister_ahash(struct ahash_alg *alg)
+void CRYPTO_API(crypto_unregister_ahash)(struct ahash_alg *alg)
 {
 	crypto_unregister_alg(&alg->halg.base);
 }
-EXPORT_SYMBOL_GPL(crypto_unregister_ahash);
+DEFINE_CRYPTO_API(crypto_unregister_ahash);
 
-int crypto_register_ahashes(struct ahash_alg *algs, int count)
+int CRYPTO_API(crypto_register_ahashes)(struct ahash_alg *algs, int count)
 {
 	int i, ret;
 
@@ -1018,18 +1018,18 @@ err:
 
 	return ret;
 }
-EXPORT_SYMBOL_GPL(crypto_register_ahashes);
+DEFINE_CRYPTO_API(crypto_register_ahashes);
 
-void crypto_unregister_ahashes(struct ahash_alg *algs, int count)
+void CRYPTO_API(crypto_unregister_ahashes)(struct ahash_alg *algs, int count)
 {
 	int i;
 
 	for (i = count - 1; i >= 0; --i)
 		crypto_unregister_ahash(&algs[i]);
 }
-EXPORT_SYMBOL_GPL(crypto_unregister_ahashes);
+DEFINE_CRYPTO_API(crypto_unregister_ahashes);
 
-int ahash_register_instance(struct crypto_template *tmpl,
+int CRYPTO_API(ahash_register_instance)(struct crypto_template *tmpl,
 			    struct ahash_instance *inst)
 {
 	int err;
@@ -1043,9 +1043,9 @@ int ahash_register_instance(struct crypto_template *tmpl,
 
 	return crypto_register_instance(tmpl, ahash_crypto_instance(inst));
 }
-EXPORT_SYMBOL_GPL(ahash_register_instance);
+DEFINE_CRYPTO_API(ahash_register_instance);
 
-void ahash_request_free(struct ahash_request *req)
+void CRYPTO_API(ahash_request_free)(struct ahash_request *req)
 {
 	if (unlikely(!req))
 		return;
@@ -1057,9 +1057,9 @@ void ahash_request_free(struct ahash_request *req)
 
 	ahash_request_zero(req);
 }
-EXPORT_SYMBOL_GPL(ahash_request_free);
+DEFINE_CRYPTO_API(ahash_request_free);
 
-int crypto_hash_digest(struct crypto_ahash *tfm, const u8 *data,
+int CRYPTO_API(crypto_hash_digest)(struct crypto_ahash *tfm, const u8 *data,
 		       unsigned int len, u8 *out)
 {
 	HASH_REQUEST_ON_STACK(req, crypto_ahash_fb(tfm));
@@ -1073,14 +1073,14 @@ int crypto_hash_digest(struct crypto_ahash *tfm, const u8 *data,
 
 	return err;
 }
-EXPORT_SYMBOL_GPL(crypto_hash_digest);
+DEFINE_CRYPTO_API(crypto_hash_digest);
 
-void ahash_free_singlespawn_instance(struct ahash_instance *inst)
+void CRYPTO_API(ahash_free_singlespawn_instance)(struct ahash_instance *inst)
 {
 	crypto_drop_spawn(ahash_instance_ctx(inst));
 	kfree(inst);
 }
-EXPORT_SYMBOL_GPL(ahash_free_singlespawn_instance);
+DEFINE_CRYPTO_API(ahash_free_singlespawn_instance);
 
 MODULE_LICENSE("GPL");
 MODULE_DESCRIPTION("Asynchronous cryptographic hash type");

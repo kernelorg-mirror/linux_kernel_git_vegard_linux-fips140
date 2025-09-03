@@ -163,3 +163,43 @@ DEFINE_CRYPTO_API_STUB(crypto_aes_set_key);
 
 #endif
 
+/*
+ * crypto/ahash.c
+ */
+#if !IS_BUILTIN(CONFIG_CRYPTO_HASH2)
+
+#include <crypto/internal/hash.h>
+
+DEFINE_CRYPTO_API_STUB(crypto_hash_walk_done);
+DEFINE_CRYPTO_API_STUB(crypto_hash_walk_first);
+DEFINE_CRYPTO_API_STUB(crypto_register_ahash);
+DEFINE_CRYPTO_API_STUB(crypto_unregister_ahash);
+DEFINE_CRYPTO_API_STUB(crypto_register_ahashes);
+DEFINE_CRYPTO_API_STUB(crypto_unregister_ahashes);
+DEFINE_CRYPTO_API_STUB(ahash_register_instance);
+DEFINE_CRYPTO_API_STUB(ahash_free_singlespawn_instance);
+DEFINE_CRYPTO_API_STUB(crypto_hash_alg_has_setkey);
+DEFINE_CRYPTO_API_STUB(crypto_grab_ahash);
+DEFINE_CRYPTO_API_STUB(shash_ahash_update);
+DEFINE_CRYPTO_API_STUB(shash_ahash_finup);
+DEFINE_CRYPTO_API_STUB(shash_ahash_digest);
+DEFINE_CRYPTO_API_STUB(crypto_ahash_export_core);
+DEFINE_CRYPTO_API_STUB(crypto_ahash_import_core);
+
+#include <crypto/hash.h>
+
+DEFINE_CRYPTO_API_STUB(crypto_alloc_ahash);
+DEFINE_CRYPTO_API_STUB(crypto_clone_ahash);
+DEFINE_CRYPTO_API_STUB(crypto_has_ahash);
+DEFINE_CRYPTO_API_STUB(crypto_ahash_setkey);
+DEFINE_CRYPTO_API_STUB(crypto_ahash_finup);
+DEFINE_CRYPTO_API_STUB(crypto_ahash_digest);
+DEFINE_CRYPTO_API_STUB(crypto_ahash_export);
+DEFINE_CRYPTO_API_STUB(crypto_ahash_import);
+DEFINE_CRYPTO_API_STUB(crypto_ahash_init);
+DEFINE_CRYPTO_API_STUB(crypto_ahash_update);
+DEFINE_CRYPTO_API_STUB(ahash_request_free);
+DEFINE_CRYPTO_API_STUB(crypto_hash_digest);
+
+#endif
+
