@@ -652,3 +652,14 @@ DEFINE_CRYPTO_API_STUB(pkcs7_get_content_data);
 
 #endif
 
+/*
+ * crypto/asymmetric_keys/pkcs7_trust.c
+ */
+#if !IS_BUILTIN(CONFIG_PKCS7_MESSAGE_PARSER)
+
+#include <crypto/pkcs7.h>
+
+DEFINE_CRYPTO_API_STUB(pkcs7_validate_trust);
+
+#endif
+

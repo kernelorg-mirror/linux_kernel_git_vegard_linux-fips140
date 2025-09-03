@@ -33,8 +33,9 @@ DECLARE_CRYPTO_API(pkcs7_get_content_data, int,
 /*
  * pkcs7_trust.c
  */
-extern int pkcs7_validate_trust(struct pkcs7_message *pkcs7,
-				struct key *trust_keyring);
+DECLARE_CRYPTO_API(pkcs7_validate_trust, int,
+	(struct pkcs7_message *pkcs7, struct key *trust_keyring),
+	(pkcs7, trust_keyring));
 
 /*
  * pkcs7_verify.c
