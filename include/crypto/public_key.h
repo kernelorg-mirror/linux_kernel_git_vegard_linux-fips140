@@ -10,6 +10,7 @@
 #ifndef _LINUX_PUBLIC_KEY_H
 #define _LINUX_PUBLIC_KEY_H
 
+#include <crypto/api.h>
 #include <linux/errno.h>
 #include <linux/keyctl.h>
 #include <linux/oid_registry.h>
@@ -35,7 +36,9 @@ struct public_key {
 #define KEY_EFLAG_KEYCERTSIGN	2	/* set if the keyCertSign usage is set */
 };
 
-extern void public_key_free(struct public_key *key);
+DECLARE_CRYPTO_API(public_key_free, void,
+	(struct public_key *key),
+	(key));
 
 /*
  * Public key cryptography signature data
@@ -108,8 +111,9 @@ extern int verify_signature(const struct key *,
 			    const struct public_key_signature *);
 
 #if IS_REACHABLE(CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE)
-int public_key_verify_signature(const struct public_key *pkey,
-				const struct public_key_signature *sig);
+DECLARE_CRYPTO_API(public_key_verify_signature, int,
+	(const struct public_key *pkey, const struct public_key_signature *sig),
+	(pkey, sig));
 #else
 static inline
 int public_key_verify_signature(const struct public_key *pkey,

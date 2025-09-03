@@ -675,3 +675,15 @@ DEFINE_CRYPTO_API_STUB(pkcs7_supply_detached_data);
 
 #endif
 
+/*
+ * crypto/asymmetric_keys/public_key.c
+ */
+#if !IS_BUILTIN(CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE)
+
+#include <crypto/public_key.h>
+
+DEFINE_CRYPTO_API_STUB(public_key_free);
+DEFINE_CRYPTO_API_STUB(public_key_verify_signature);
+
+#endif
+
