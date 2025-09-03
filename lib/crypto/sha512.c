@@ -147,19 +147,19 @@ static void __sha512_init(struct __sha512_ctx *ctx,
 	ctx->bytecount_hi = 0;
 }
 
-void sha384_init(struct sha384_ctx *ctx)
+void CRYPTO_API(sha384_init)(struct sha384_ctx *ctx)
 {
 	__sha512_init(&ctx->ctx, &sha384_iv, 0);
 }
-EXPORT_SYMBOL_GPL(sha384_init);
+DEFINE_CRYPTO_API(sha384_init);
 
-void sha512_init(struct sha512_ctx *ctx)
+void CRYPTO_API(sha512_init)(struct sha512_ctx *ctx)
 {
 	__sha512_init(&ctx->ctx, &sha512_iv, 0);
 }
-EXPORT_SYMBOL_GPL(sha512_init);
+DEFINE_CRYPTO_API(sha512_init);
 
-void __sha512_update(struct __sha512_ctx *ctx, const u8 *data, size_t len)
+void CRYPTO_API(__sha512_update)(struct __sha512_ctx *ctx, const u8 *data, size_t len)
 {
 	size_t partial = ctx->bytecount_lo % SHA512_BLOCK_SIZE;
 
@@ -191,7 +191,7 @@ void __sha512_update(struct __sha512_ctx *ctx, const u8 *data, size_t len)
 	if (len)
 		memcpy(&ctx->buf[partial], data, len);
 }
-EXPORT_SYMBOL_GPL(__sha512_update);
+DEFINE_CRYPTO_API(__sha512_update);
 
 static void __sha512_final(struct __sha512_ctx *ctx,
 			   u8 *out, size_t digest_size)
@@ -215,21 +215,21 @@ static void __sha512_final(struct __sha512_ctx *ctx,
 		put_unaligned_be64(ctx->state.h[i / 8], out + i);
 }
 
-void sha384_final(struct sha384_ctx *ctx, u8 out[SHA384_DIGEST_SIZE])
+void CRYPTO_API(sha384_final)(struct sha384_ctx *ctx, u8 out[SHA384_DIGEST_SIZE])
 {
 	__sha512_final(&ctx->ctx, out, SHA384_DIGEST_SIZE);
 	memzero_explicit(ctx, sizeof(*ctx));
 }
-EXPORT_SYMBOL_GPL(sha384_final);
+DEFINE_CRYPTO_API(sha384_final);
 
-void sha512_final(struct sha512_ctx *ctx, u8 out[SHA512_DIGEST_SIZE])
+void CRYPTO_API(sha512_final)(struct sha512_ctx *ctx, u8 out[SHA512_DIGEST_SIZE])
 {
 	__sha512_final(&ctx->ctx, out, SHA512_DIGEST_SIZE);
 	memzero_explicit(ctx, sizeof(*ctx));
 }
-EXPORT_SYMBOL_GPL(sha512_final);
+DEFINE_CRYPTO_API(sha512_final);
 
-void sha384(const u8 *data, size_t len, u8 out[SHA384_DIGEST_SIZE])
+void CRYPTO_API(sha384)(const u8 *data, size_t len, u8 out[SHA384_DIGEST_SIZE])
 {
 	struct sha384_ctx ctx;
 
@@ -237,9 +237,9 @@ void sha384(const u8 *data, size_t len, u8 out[SHA384_DIGEST_SIZE])
 	sha384_update(&ctx, data, len);
 	sha384_final(&ctx, out);
 }
-EXPORT_SYMBOL_GPL(sha384);
+DEFINE_CRYPTO_API(sha384);
 
-void sha512(const u8 *data, size_t len, u8 out[SHA512_DIGEST_SIZE])
+void CRYPTO_API(sha512)(const u8 *data, size_t len, u8 out[SHA512_DIGEST_SIZE])
 {
 	struct sha512_ctx ctx;
 
@@ -247,7 +247,7 @@ void sha512(const u8 *data, size_t len, u8 out[SHA512_DIGEST_SIZE])
 	sha512_update(&ctx, data, len);
 	sha512_final(&ctx, out);
 }
-EXPORT_SYMBOL_GPL(sha512);
+DEFINE_CRYPTO_API(sha512);
 
 static void __hmac_sha512_preparekey(struct sha512_block_state *istate,
 				     struct sha512_block_state *ostate,
@@ -282,31 +282,31 @@ static void __hmac_sha512_preparekey(struct sha512_block_state *istate,
 	memzero_explicit(&derived_key, sizeof(derived_key));
 }
 
-void hmac_sha384_preparekey(struct hmac_sha384_key *key,
+void CRYPTO_API(hmac_sha384_preparekey)(struct hmac_sha384_key *key,
 			    const u8 *raw_key, size_t raw_key_len)
 {
 	__hmac_sha512_preparekey(&key->key.istate, &key->key.ostate,
 				 raw_key, raw_key_len, &sha384_iv);
 }
-EXPORT_SYMBOL_GPL(hmac_sha384_preparekey);
+DEFINE_CRYPTO_API(hmac_sha384_preparekey);
 
-void hmac_sha512_preparekey(struct hmac_sha512_key *key,
+void CRYPTO_API(hmac_sha512_preparekey)(struct hmac_sha512_key *key,
 			    const u8 *raw_key, size_t raw_key_len)
 {
 	__hmac_sha512_preparekey(&key->key.istate, &key->key.ostate,
 				 raw_key, raw_key_len, &sha512_iv);
 }
-EXPORT_SYMBOL_GPL(hmac_sha512_preparekey);
+DEFINE_CRYPTO_API(hmac_sha512_preparekey);
 
-void __hmac_sha512_init(struct __hmac_sha512_ctx *ctx,
+void CRYPTO_API(__hmac_sha512_init)(struct __hmac_sha512_ctx *ctx,
 			const struct __hmac_sha512_key *key)
 {
 	__sha512_init(&ctx->sha_ctx, &key->istate, SHA512_BLOCK_SIZE);
 	ctx->ostate = key->ostate;
 }
-EXPORT_SYMBOL_GPL(__hmac_sha512_init);
+DEFINE_CRYPTO_API(__hmac_sha512_init);
 
-void hmac_sha384_init_usingrawkey(struct hmac_sha384_ctx *ctx,
+void CRYPTO_API(hmac_sha384_init_usingrawkey)(struct hmac_sha384_ctx *ctx,
 				  const u8 *raw_key, size_t raw_key_len)
 {
 	__hmac_sha512_preparekey(&ctx->ctx.sha_ctx.state, &ctx->ctx.ostate,
@@ -314,9 +314,9 @@ void hmac_sha384_init_usingrawkey(struct hmac_sha384_ctx *ctx,
 	ctx->ctx.sha_ctx.bytecount_lo = SHA512_BLOCK_SIZE;
 	ctx->ctx.sha_ctx.bytecount_hi = 0;
 }
-EXPORT_SYMBOL_GPL(hmac_sha384_init_usingrawkey);
+DEFINE_CRYPTO_API(hmac_sha384_init_usingrawkey);
 
-void hmac_sha512_init_usingrawkey(struct hmac_sha512_ctx *ctx,
+void CRYPTO_API(hmac_sha512_init_usingrawkey)(struct hmac_sha512_ctx *ctx,
 				  const u8 *raw_key, size_t raw_key_len)
 {
 	__hmac_sha512_preparekey(&ctx->ctx.sha_ctx.state, &ctx->ctx.ostate,
@@ -324,7 +324,7 @@ void hmac_sha512_init_usingrawkey(struct hmac_sha512_ctx *ctx,
 	ctx->ctx.sha_ctx.bytecount_lo = SHA512_BLOCK_SIZE;
 	ctx->ctx.sha_ctx.bytecount_hi = 0;
 }
-EXPORT_SYMBOL_GPL(hmac_sha512_init_usingrawkey);
+DEFINE_CRYPTO_API(hmac_sha512_init_usingrawkey);
 
 static void __hmac_sha512_final(struct __hmac_sha512_ctx *ctx,
 				u8 *out, size_t digest_size)
@@ -345,21 +345,21 @@ static void __hmac_sha512_final(struct __hmac_sha512_ctx *ctx,
 	memzero_explicit(ctx, sizeof(*ctx));
 }
 
-void hmac_sha384_final(struct hmac_sha384_ctx *ctx,
+void CRYPTO_API(hmac_sha384_final)(struct hmac_sha384_ctx *ctx,
 		       u8 out[SHA384_DIGEST_SIZE])
 {
 	__hmac_sha512_final(&ctx->ctx, out, SHA384_DIGEST_SIZE);
 }
-EXPORT_SYMBOL_GPL(hmac_sha384_final);
+DEFINE_CRYPTO_API(hmac_sha384_final);
 
-void hmac_sha512_final(struct hmac_sha512_ctx *ctx,
+void CRYPTO_API(hmac_sha512_final)(struct hmac_sha512_ctx *ctx,
 		       u8 out[SHA512_DIGEST_SIZE])
 {
 	__hmac_sha512_final(&ctx->ctx, out, SHA512_DIGEST_SIZE);
 }
-EXPORT_SYMBOL_GPL(hmac_sha512_final);
+DEFINE_CRYPTO_API(hmac_sha512_final);
 
-void hmac_sha384(const struct hmac_sha384_key *key,
+void CRYPTO_API(hmac_sha384)(const struct hmac_sha384_key *key,
 		 const u8 *data, size_t data_len, u8 out[SHA384_DIGEST_SIZE])
 {
 	struct hmac_sha384_ctx ctx;
@@ -368,9 +368,9 @@ void hmac_sha384(const struct hmac_sha384_key *key,
 	hmac_sha384_update(&ctx, data, data_len);
 	hmac_sha384_final(&ctx, out);
 }
-EXPORT_SYMBOL_GPL(hmac_sha384);
+DEFINE_CRYPTO_API(hmac_sha384);
 
-void hmac_sha512(const struct hmac_sha512_key *key,
+void CRYPTO_API(hmac_sha512)(const struct hmac_sha512_key *key,
 		 const u8 *data, size_t data_len, u8 out[SHA512_DIGEST_SIZE])
 {
 	struct hmac_sha512_ctx ctx;
@@ -379,9 +379,9 @@ void hmac_sha512(const struct hmac_sha512_key *key,
 	hmac_sha512_update(&ctx, data, data_len);
 	hmac_sha512_final(&ctx, out);
 }
-EXPORT_SYMBOL_GPL(hmac_sha512);
+DEFINE_CRYPTO_API(hmac_sha512);
 
-void hmac_sha384_usingrawkey(const u8 *raw_key, size_t raw_key_len,
+void CRYPTO_API(hmac_sha384_usingrawkey)(const u8 *raw_key, size_t raw_key_len,
 			     const u8 *data, size_t data_len,
 			     u8 out[SHA384_DIGEST_SIZE])
 {
@@ -391,9 +391,9 @@ void hmac_sha384_usingrawkey(const u8 *raw_key, size_t raw_key_len,
 	hmac_sha384_update(&ctx, data, data_len);
 	hmac_sha384_final(&ctx, out);
 }
-EXPORT_SYMBOL_GPL(hmac_sha384_usingrawkey);
+DEFINE_CRYPTO_API(hmac_sha384_usingrawkey);
 
-void hmac_sha512_usingrawkey(const u8 *raw_key, size_t raw_key_len,
+void CRYPTO_API(hmac_sha512_usingrawkey)(const u8 *raw_key, size_t raw_key_len,
 			     const u8 *data, size_t data_len,
 			     u8 out[SHA512_DIGEST_SIZE])
 {
@@ -403,7 +403,7 @@ void hmac_sha512_usingrawkey(const u8 *raw_key, size_t raw_key_len,
 	hmac_sha512_update(&ctx, data, data_len);
 	hmac_sha512_final(&ctx, out);
 }
-EXPORT_SYMBOL_GPL(hmac_sha512_usingrawkey);
+DEFINE_CRYPTO_API(hmac_sha512_usingrawkey);
 
 #ifdef sha512_mod_init_arch
 static int __init sha512_mod_init(void)
@@ -411,12 +411,12 @@ static int __init sha512_mod_init(void)
 	sha512_mod_init_arch();
 	return 0;
 }
-subsys_initcall(sha512_mod_init);
+crypto_subsys_initcall(sha512_mod_init);
 
 static void __exit sha512_mod_exit(void)
 {
 }
-module_exit(sha512_mod_exit);
+crypto_module_exit(sha512_mod_exit);
 #endif
 
 MODULE_DESCRIPTION("SHA-384, SHA-512, HMAC-SHA384, and HMAC-SHA512 library functions");
