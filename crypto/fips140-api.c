@@ -713,3 +713,14 @@ DEFINE_CRYPTO_API_STUB(x509_decode_time);
 
 #endif
 
+/*
+ * crypto/asymmetric_keys/x509_loader.c
+ */
+#if !IS_BUILTIN(CONFIG_X509_CERTIFICATE_PARSER)
+
+#include <keys/asymmetric-type.h>
+
+DEFINE_CRYPTO_API_STUB(x509_load_certificate_list);
+
+#endif
+
