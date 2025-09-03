@@ -40,11 +40,13 @@ DECLARE_CRYPTO_API(pkcs7_validate_trust, int,
 /*
  * pkcs7_verify.c
  */
-extern int pkcs7_verify(struct pkcs7_message *pkcs7,
-			enum key_being_used_for usage);
+DECLARE_CRYPTO_API(pkcs7_verify, int,
+	(struct pkcs7_message *pkcs7, enum key_being_used_for usage),
+	(pkcs7, usage));
 
-extern int pkcs7_supply_detached_data(struct pkcs7_message *pkcs7,
-				      const void *data, size_t datalen);
+DECLARE_CRYPTO_API(pkcs7_supply_detached_data, int,
+	(struct pkcs7_message *pkcs7, const void *data, size_t datalen),
+	(pkcs7, data, datalen));
 
 extern int pkcs7_get_digest(struct pkcs7_message *pkcs7, const u8 **buf,
 			    u32 *len, enum hash_algo *hash_algo);
