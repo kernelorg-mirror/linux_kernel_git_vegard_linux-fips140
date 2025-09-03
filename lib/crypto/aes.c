@@ -183,7 +183,7 @@ static u32 subw(u32 in)
  * described in FIPS-197. The first slot (16 bytes) of each key (enc or dec) is
  * for the initial combination, the second slot for the first round and so on.
  */
-int aes_expandkey(struct crypto_aes_ctx *ctx, const u8 *in_key,
+int CRYPTO_API(aes_expandkey)(struct crypto_aes_ctx *ctx, const u8 *in_key,
 		  unsigned int key_len)
 {
 	u32 kwords = key_len / sizeof(u32);
@@ -248,7 +248,7 @@ int aes_expandkey(struct crypto_aes_ctx *ctx, const u8 *in_key,
 
 	return 0;
 }
-EXPORT_SYMBOL(aes_expandkey);
+DEFINE_CRYPTO_API(aes_expandkey);
 
 /**
  * aes_encrypt - Encrypt a single AES block
@@ -256,7 +256,7 @@ EXPORT_SYMBOL(aes_expandkey);
  * @out:	Buffer to store the ciphertext
  * @in:		Buffer containing the plaintext
  */
-void aes_encrypt(const struct crypto_aes_ctx *ctx, u8 *out, const u8 *in)
+void CRYPTO_API(aes_encrypt)(const struct crypto_aes_ctx *ctx, u8 *out, const u8 *in)
 {
 	const u32 *rkp = ctx->key_enc + 4;
 	int rounds = 6 + ctx->key_length / 4;
@@ -299,7 +299,7 @@ void aes_encrypt(const struct crypto_aes_ctx *ctx, u8 *out, const u8 *in)
 	put_unaligned_le32(subshift(st1, 2) ^ rkp[6], out + 8);
 	put_unaligned_le32(subshift(st1, 3) ^ rkp[7], out + 12);
 }
-EXPORT_SYMBOL(aes_encrypt);
+DEFINE_CRYPTO_API(aes_encrypt);
 
 /**
  * aes_decrypt - Decrypt a single AES block
@@ -307,7 +307,7 @@ EXPORT_SYMBOL(aes_encrypt);
  * @out:	Buffer to store the plaintext
  * @in:		Buffer containing the ciphertext
  */
-void aes_decrypt(const struct crypto_aes_ctx *ctx, u8 *out, const u8 *in)
+void CRYPTO_API(aes_decrypt)(const struct crypto_aes_ctx *ctx, u8 *out, const u8 *in)
 {
 	const u32 *rkp = ctx->key_dec + 4;
 	int rounds = 6 + ctx->key_length / 4;
@@ -350,7 +350,7 @@ void aes_decrypt(const struct crypto_aes_ctx *ctx, u8 *out, const u8 *in)
 	put_unaligned_le32(inv_subshift(st1, 2) ^ rkp[6], out + 8);
 	put_unaligned_le32(inv_subshift(st1, 3) ^ rkp[7], out + 12);
 }
-EXPORT_SYMBOL(aes_decrypt);
+DEFINE_CRYPTO_API(aes_decrypt);
 
 MODULE_DESCRIPTION("Generic AES library");
 MODULE_AUTHOR("Ard Biesheuvel <ard.biesheuvel@linaro.org>");
