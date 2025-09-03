@@ -148,7 +148,7 @@ sha256_blocks_generic(struct sha256_block_state *state,
 	memzero_explicit(W, sizeof(W));
 }
 
-#if defined(CONFIG_CRYPTO_LIB_SHA256_ARCH) && !defined(__DISABLE_EXPORTS)
+#if defined(CONFIG_CRYPTO_LIB_SHA256_ARCH) && !defined(__DISABLE_EXPORTS) && !defined(FIPS_MODULE)
 #include "sha256.h" /* $(SRCARCH)/sha256.h */
 #else
 #define sha256_blocks sha256_blocks_generic
