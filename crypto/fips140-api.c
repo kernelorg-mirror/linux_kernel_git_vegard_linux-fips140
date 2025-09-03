@@ -562,3 +562,19 @@ DEFINE_CRYPTO_API_STUB(crypto_grab_sig);
 
 #endif
 
+/*
+ * crypto/simd.c
+ */
+#if !IS_BUILTIN(CONFIG_CRYPTO_SIMD)
+
+#include <crypto/internal/simd.h>
+
+DEFINE_CRYPTO_API_STUB(simd_skcipher_create_compat);
+DEFINE_CRYPTO_API_STUB(simd_skcipher_free);
+DEFINE_CRYPTO_API_STUB(simd_register_skciphers_compat);
+DEFINE_CRYPTO_API_STUB(simd_unregister_skciphers);
+DEFINE_CRYPTO_API_STUB(simd_register_aeads_compat);
+DEFINE_CRYPTO_API_STUB(simd_unregister_aeads);
+
+#endif
+
